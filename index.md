@@ -1,6 +1,12 @@
 My name is Amirhossein Afsharrad. I am currently a senior undergraduate student at <a href="http://www.sharif.ir/home">Sharif University of Technology</a> studying Electrical Engineering and Computer Science (second major). 
 Currently I am working on statistical signal processing under supervision of Professor <a href="http://sharif.edu/~mbzadeh/">Massoud Babaie-Zadeh</a> and on machine learning under supervision of Professor <a href="https://scholar.google.com/citations?user=CFIJZwoAAAAJ&hl=en">Mohammadali Maddah-Ali</a>.
 
+Here are my <a href="https://github.com/AmirAfsharrad/AmirAfsharrad.github.io/blob/main/Amirhossein%20Afsharrad%20CV.pdf">CV</a> and 
+<a href="https://github.com/AmirAfsharrad/AmirAfsharrad.github.io/blob/main/Amirhossein%20Afsharrad%20Transcript.pdf">transcript.</a>
+
+Also feel free to send contact me on afsharrad.a@gmail.com.
+
+
 
 # Education
 * B.Sc. in Electrical Engineering, Sharif University of Technology, Tehran, Iran (2016-2021).
