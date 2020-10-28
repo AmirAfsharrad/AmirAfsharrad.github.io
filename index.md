@@ -4,7 +4,7 @@ Currently I am working on statistical signal processing under supervision of Pro
 Here are my <a href="Amirhossein Afsharrad CV.pdf" download>CV</a> and 
 <a href="Amirhossein Afsharrad Transcript.pdf" download>transcript.</a>
 
-Also feel free to send contact me on afsharrad.a@gmail.com.
+Also feel free to contact me on afsharrad.a@gmail.com.
 
 
 
