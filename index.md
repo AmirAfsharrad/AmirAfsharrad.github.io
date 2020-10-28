@@ -78,6 +78,14 @@ Here are some of the courses I have passed at Sharif University of Technology, a
 
   This is the link to my code repository for some of my homeworks in the Computational Neuroscience II course, where I implemented neural networks for different tasks such as a reinforcement learning problem. The repository also contains some Farsi reports from some related papers.
   
+  
+* [Code repository of MATLAB codes for numerical optimization](https://github.com/AmirAfsharrad/Numerical-Methods-in-Optimization)
+
+  This is the link to my code repository for the homeworks of my graduate course of Numerical Methods in Optimization, where I have implemented different optimization tools in MATLAB.
+  
 * [Code repository of MATLAB simulations of neuroscientific machine learning tasks](https://github.com/AmirAfsharrad/Computational-Neuroscience-Course)
 
   This is the link to the code repository for my homeworks and final presentation in the Computational Neuroscience course. These homeworks include machine learning and signal processing tasks performed on neural data. These codes are the result of a joint work by [Taha Entesari](http://ee.sharif.ir/~taha.entesari/) and me.
+  
+* [Code repository of MATLAB codes for signal processing](https://github.com/AmirAfsharrad/Signals-and-Systems)
+  This is the link to the code repository for my projects of the Signals and Systems course, where I have implemented different signal processing tools in MATLAB. Among these are codes for image processing and codes for a Brain Computer Interface (BCI), where machine learning tools have also beet utilized. These codes are the result of a joint work by [Behrad Moniri](https://bemoniri.github.io/reports.html) and me.
