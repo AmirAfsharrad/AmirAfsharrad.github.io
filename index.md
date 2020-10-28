@@ -90,3 +90,7 @@ Here are some of the courses I have passed at Sharif University of Technology, a
 * [Code repository of MATLAB codes for signal processing](https://github.com/AmirAfsharrad/Signals-and-Systems)
 
   This is the link to the code repository for my projects of the Signals and Systems course, where I have implemented different signal processing tools in MATLAB. Among these are codes for image processing and codes for a Brain Computer Interface (BCI), where machine learning tools have also beet utilized. These codes are the result of a joint work by [Behrad Moniri](https://bemoniri.github.io/reports.html) and me.
+  
+* [Code repository of web scraping sample codes in Python](https://github.com/AmirAfsharrad/Web-Scraping)
+
+  This is the likn to a code repository, where two jupyter notebooks exist. Each of them includes a different project where web scraping methods have been utelized using Python. One is part of my summer internship project, where I designed a basic data extractor and analyzer for Instagram. This project was done with collaboration of [Ehsan Sharifian](). The other one is an automatic code to extract the CAPTCHA and log into the education system of Sharif University of Technology.
