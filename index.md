@@ -99,7 +99,7 @@ Here are some of the courses I have passed at Sharif University of Technology, a
 ## Selected Notes and Reports
 * Communication Systems Course
 
-  I have designed multiple homeworks and quizzes for the Communication Systems course as a teaching assistant. You can find some of these problems below.
+  I have designed multiple homeworks and quizzes for the Communication Systems course as a teaching assistant. You can find some of these documents below.
 
   <a href="Selected Notes and Reports/Communication Systems HW01.pdf" download>HW01</a>
   <a href="Selected Notes and Reports/Communication Systems HW02.pdf" download>HW02</a>
@@ -113,6 +113,8 @@ Here are some of the courses I have passed at Sharif University of Technology, a
   <a href="Selected Notes and Reports/Communication Systems Quiz05.pdf" download>Quiz05</a>
 
 * Engineering Mathematics Course
+
+  I have designed multiple homeworks and quizzes for the Engineering Mathematics course as a teaching assistant. You can find some of these documents below.
   
   <a href="Selected Notes and Reports/EngMath ProblemSet01.pdf" download>HW01</a>
   <a href="Selected Notes and Reports/EngMath ProblemSet02.pdf" download>HW02</a>
@@ -121,3 +123,11 @@ Here are some of the courses I have passed at Sharif University of Technology, a
   <a href="Selected Notes and Reports/EngMath ProblemSet05.pdf" download>HW05</a>
   <a href="Selected Notes and Reports/EngMath ProblemSet06.pdf" download>HW06</a>
   
+* Signals and Systems Course
+
+  You may find some of my tutorial lecture slides for the signals and systems course below.
+  
+  <a href="Selected Notes and Reports/Signal Tutorial01.pdf" download>Tutorial01: Introduction</a>
+  <a href="Selected Notes and Reports/Signal Tutorial02.pdf" download>Tutorial01: z-Transform</a>
+  <a href="Selected Notes and Reports/Signal Tutorial03.pdf" download>Tutorial01: Laplace Transform</a>
+  <a href="Selected Notes and Reports/Signal Tutorial04.pdf" download>Tutorial01: Selected Problems</a>
