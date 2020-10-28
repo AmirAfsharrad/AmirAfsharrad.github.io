@@ -63,3 +63,12 @@ Here are some of the courses I have passed at Sharif University of Technology, a
 * Game Theory (audited)
 * Foundations of Measure Theory (self-studied)
 * and High-Dimensional Probability (self-studied)
+
+# Selected Notes, Codes, and Reports
+## Selected Codes
+* You may visit my Java code for the Advanced Programming course, where I implemented a full graphical version of Hearthstone game [here](https://github.com/AmirAfsharrad/Hearthstone).
+
+* You may visit my Java code for a simple graphical Tetris game, implemented as a homework for the Advanced Programming course [here](https://github.com/AmirAfsharrad/Tetris).
+
+* 
+
