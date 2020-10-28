@@ -139,3 +139,12 @@ Here are some of the courses I have passed at Sharif University of Technology, a
 
 * <a href="Selected Notes and Reports/ML@Edge.pdf" download>Introduction slides for the Edge Machine Learning Project</a>
 
+* Some Farsi sample reports:
+
+  <a href="Selected Notes and Reports/ControlProject_Afsharrad.pdf" download>Linear Control Systems course project report</a>
+  
+  <a href="Selected Notes and Reports/95101077 Cryptography Project.pdf" download>Introduction to Cryptography course project report</a>
+  
+  <a href="Selected Notes and Reports/CommunicationSystems_Afsharrad.pdf" download>Communication Systems course project report</a>
+  
+  <a href="Selected Notes and Reports/InternshipReport.pdf" download>Internship report</a>
