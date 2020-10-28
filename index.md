@@ -137,3 +137,5 @@ Here are some of the courses I have passed at Sharif University of Technology, a
   
 * <a href="Selected Notes and Reports/Measure Theory.pdf" download>A brief note on Measure Theory</a>
 
+* <a href="Selected Notes and Reports/ML@Edge.pdf" download>Introduction slides for the Edge Machine Learning Project</a>
+
