@@ -94,3 +94,20 @@ Here are some of the courses I have passed at Sharif University of Technology, a
 * [Code repository of web scraping sample codes in Python](https://github.com/AmirAfsharrad/Web-Scraping)
 
   This is the likn to a code repository, where two jupyter notebooks exist. Each of them includes a different project where web scraping methods have been utelized using Python. One is part of my summer internship project, where I designed a basic data extractor and analyzer for Instagram. This project was done with collaboration of [Ehsan Sharifian](). The other one is an automatic code to extract the CAPTCHA and log into the education system of Sharif University of Technology.
+
+
+## Selected Notes and Reports
+* Communication Systems course
+
+  I have designed multiple homeworks and quizzes for the Communication Systems course as a teaching assistant. You can find some of these problems below.
+
+  <a href="Selected Notes and Reports/Communication Systems HW01.pdf" download>HW01</a>
+  <a href="Selected Notes and Reports/Communication Systems HW02.pdf" download>HW02</a>
+  <a href="Selected Notes and Reports/Communication Systems HW03.pdf" download>HW03</a>
+  <a href="Selected Notes and Reports/Communication Systems HW04.pdf" download>HW04</a>
+
+  <a href="Selected Notes and Reports/Communication Systems Quiz01.pdf" download>Quiz01</a>
+  <a href="Selected Notes and Reports/Communication Systems Quiz02.pdf" download>Quiz02</a>
+  <a href="Selected Notes and Reports/Communication Systems Quiz03.pdf" download>Quiz03</a>
+  <a href="Selected Notes and Reports/Communication Systems Quiz04.pdf" download>Quiz04</a>
+  <a href="Selected Notes and Reports/Communication Systems Quiz05.pdf" download>Quiz05</a>
