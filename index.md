@@ -49,9 +49,9 @@ I have also been a teacher to highschool students in mathematics and physics in 
 # Selected Courses
 Here are some of the courses I have passed at Sharif University of Technology, audited, or self-studied:
 
-* Theoretical Machine Learning (graduate)
-* Information Theory and Coding (graduate)
-* Numerical Methods in Optimization (graduate)
+* Theoretical Machine Learning (graduate course)
+* Information Theory and Coding (graduate course)
+* Numerical Methods in Optimization (graduate course)
 * Convex Optimization
 * Mathematical Analysis
 * Linear Algebra
@@ -66,9 +66,18 @@ Here are some of the courses I have passed at Sharif University of Technology, a
 
 # Selected Notes, Codes, and Reports
 ## Selected Codes
-* You may visit my Java code for the Advanced Programming course, where I implemented a full graphical version of Hearthstone game [here](https://github.com/AmirAfsharrad/Hearthstone).
+* [Graphical implementation of Hearthstone game in Java](https://github.com/AmirAfsharrad/Hearthstone)
 
-* You may visit my Java code for a simple graphical Tetris game, implemented as a homework for the Advanced Programming course [here](https://github.com/AmirAfsharrad/Tetris).
+  This is my project in the Advanced Programming course, where I implemented a full graphical version of Hearthstone game using Java.
 
-* 
+* [Graphical implementation of Tetris game in Java](https://github.com/AmirAfsharrad/Tetris)
 
+  This is a homework on mine in the Advanced Programming course, where I implemented my own version of the popular Tetris game.
+  
+* [Code repository of deep learning homeworks](https://github.com/AmirAfsharrad/Neuroscience-learning-memory-cognition)
+
+  This is the link to my code repository for some of my homeworks in the Computational Neuroscience II course, where I implemented neural networks for different tasks such as a reinforcement learning problem. The repository also contains some Farsi reports from some related papers.
+  
+* [Code repository of MATLAB simulations of neuroscientific machine learning tasks](https://github.com/AmirAfsharrad/Computational-Neuroscience-Course)
+
+  This is the link to the code repository for my homeworks and final presentation in the Computational Neuroscience course. These homeworks include machine learning and signal processing tasks performed on neural data. These codes are the result of a joint work by [Taha Entesari](http://ee.sharif.ir/~taha.entesari/) and me.
