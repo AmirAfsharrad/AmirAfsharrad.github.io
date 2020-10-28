@@ -66,6 +66,7 @@ Here are some of the courses I have passed at Sharif University of Technology, a
 
 # Selected Notes, Codes, and Reports
 ## Selected Codes
+The codes provided below are only selected samples. If you look for any specific piece of code, please send me an email.
 * [Graphical implementation of Hearthstone game in Java](https://github.com/AmirAfsharrad/Hearthstone)
 
   This is my project in the Advanced Programming course, where I implemented a full graphical version of Hearthstone game using Java.
@@ -97,6 +98,7 @@ Here are some of the courses I have passed at Sharif University of Technology, a
 
 
 ## Selected Notes and Reports
+The documents provided below are selected samples of my reports, notes, and designed problems. If you look for any specific document, please send me an email.
 * Communication Systems Course
 
   I have designed multiple homeworks and quizzes for the Communication Systems course as a teaching assistant. You can find some of these documents below.
