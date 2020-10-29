@@ -57,6 +57,7 @@ Here are some of the courses I have passed at Sharif University of Technology, a
 * Convex Optimization
 * Mathematical Analysis
 * Linear Algebra
+* Stochastic Processes
 * Analysis of Algorithms
 * Statistics and Applications
 * Control of Linear Systems
