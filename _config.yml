@@ -3,3 +3,4 @@ title: Amirhossein Afsharrad
 description: Welcome to my homepage!
 name: Amirhossein Afsharrad
 markdown: kramdown
+* TOC {:toc}
