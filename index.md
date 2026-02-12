@@ -1,11 +1,9 @@
 ---
-layout: home
+layout: default
 title: About
 ---
 
-<img src="assets/amirhossein.jpg" alt="Amirhossein Afsharrad" style="width: 200px; max-width: 100%; display: block; margin-bottom: 20px;">
-
-# Amirhossein Afsharrad
+# About
 
 I am a PhD candidate in [Electrical Engineering](https://ee.stanford.edu/) at [Stanford University](https://www.stanford.edu/), advised by [Professor Sanjay Lall](https://lall.stanford.edu/).
 
