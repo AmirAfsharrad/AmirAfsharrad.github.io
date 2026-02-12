@@ -1,5 +1,42 @@
-theme: jekyll-theme-leap-day
+# Site settings
 title: Amirhossein Afsharrad
-description: Welcome to my homepage!
-name: Amirhossein Afsharrad
+email: afsharrad@stanford.edu
+description: PhD Candidate in Electrical Engineering at Stanford University
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://amirafsharrad.github.io" # the base hostname & protocol for your site
+
+# Build settings
 markdown: kramdown
+theme: minima
+
+# Personal info
+author:
+  name: Amirhossein Afsharrad
+  email: afsharrad@stanford.edu
+  twitter: # your Twitter username (optional)
+  github: amirafsharrad
+  linkedin: # your LinkedIn username (optional)
+  google_scholar: yuvhn2oAAAAJ
+
+# Navigation
+header_pages:
+  - index.md
+  - research.md
+  - teaching.md
+  - blog.md
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /blog/:year/:title/
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
