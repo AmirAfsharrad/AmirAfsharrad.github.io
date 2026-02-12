@@ -21,9 +21,9 @@ author:
 # Navigation
 header_pages:
   - index.md
-  - research.md
-  - teaching.md
-  - blog.md
+  # - research.md
+  # - teaching.md
+  # - blog.md
 
 # Collections
 collections:
