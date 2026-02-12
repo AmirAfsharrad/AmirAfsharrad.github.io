@@ -1,6 +1,21 @@
 ---
-layout: default
+layout: home
+title: About
 ---
+
+<div style="display: flex; align-items: flex-start; gap: 30px; margin-bottom: 40px;">
+  <img src="assets/amirhossein.png" alt="Amirhossein Afsharrad" style="width: 200px; height: 200px; object-fit: cover;">
+  <div>
+    <h1 style="margin-top: 0;">Amirhossein Afsharrad</h1>
+    <p><strong>PhD Candidate, Electrical Engineering</strong><br>
+    Stanford University</p>
+    <p>
+      <a href="mailto:afsharrad@stanford.edu">Email</a> •
+      <a href="https://scholar.google.com/citations?user=yuvhn2oAAAAJ" target="_blank">Google Scholar</a> •
+      <a href="https://github.com/amirafsharrad" target="_blank">GitHub</a>
+    </p>
+  </div>
+</div>
 
 ## About
 

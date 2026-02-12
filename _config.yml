@@ -7,20 +7,14 @@ url: "https://amirafsharrad.github.io" # the base hostname & protocol for your s
 
 # Build settings
 markdown: kramdown
-remote_theme: pages-themes/minimal@v0.2.0
+theme: minima
 plugins:
-  - jekyll-remote-theme
-
-# Sidebar info (for Minimal theme)
-logo: /assets/amirhossein.png
-show_downloads: false
+  - jekyll-feed
 
 # Navigation
 header_pages:
   - index.md
-  # - research.md
-  # - teaching.md
-  # - blog.md
+  - blog.md
 
 # Collections
 collections:
