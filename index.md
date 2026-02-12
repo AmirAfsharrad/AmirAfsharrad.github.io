@@ -3,25 +3,22 @@ layout: home
 title: About
 ---
 
-<img src="assets/amirhossein.jpg" alt="Amirhossein Afsharrad" style="width: 250px; border-radius: 50%; display: block; margin: 0 auto 30px;">
+<img src="assets/amirhossein.jpg" alt="Amirhossein Afsharrad" style="width: 200px; max-width: 100%; display: block; margin-bottom: 20px;">
 
 # Amirhossein Afsharrad
 
-I am a PhD candidate in [Electrical Engineering](https://ee.stanford.edu/) at [Stanford University](https://www.stanford.edu/), where I work on problems at the intersection of **optimization**, **control**, and **machine learning**.
+I am a PhD candidate in [Electrical Engineering](https://ee.stanford.edu/) at [Stanford University](https://www.stanford.edu/), advised by [Professor Sanjay Lall](https://lall.stanford.edu/).
 
-My research interests include:
-- Optimization and control theory
-- Reinforcement learning and bandits
-- Machine learning theory and applications
+My current research primarily focuses on **post-training of large language models**, **LLM alignment with human preferences**, and **evaluation and reward modeling of LLMs**.
 
-I am fortunate to collaborate with the [Stanford Lall Group](https://lall.stanford.edu/), [Stanford Tse Lab](https://tselab.stanford.edu/), as well as industry partners including Wells Fargo and Toyota Research Institute.
+I am also interested in more theoretical problems in **optimization and reinforcement learning**, including bandit problems with safety constraints and multi-agent settings, as well as problems at the intersection of **optimization and control** such as applications of transformer models in control theory and autonomous systems. These areas were a primary focus earlier in my PhD, and I continue to work on projects in these directions.
 
-Prior to Stanford, I received my B.Sc. in Electrical Engineering and Computer Science from [Sharif University of Technology](http://www.sharif.ir/home), where I was fortunate to work with [Prof. Mohammadali Maddah-Ali](https://scholar.google.com/citations?user=CFIJZwoAAAAJ&hl=en).
+Prior to Stanford, I received my B.Sc. in Electrical Engineering and Computer Science from [Sharif University of Technology](http://www.sharif.ir/home), where I was advised by [Prof. Mohammadali Maddah-Ali](https://scholar.google.com/citations?user=CFIJZwoAAAAJ&hl=en).
 
 ## News
 
-- **January 2025**: New preprint on generalizable spacecraft trajectory generation via multimodal learning with transformers
-- **January 2025**: Paper on cooperative multi-agent constrained stochastic linear bandits submitted
+- **January 2026**: Our paper "Beyond Binary Preferences: A Principled Framework for Reward Modeling with Ordinal Feedback" was accepted to ICLR 2026 [[paper](https://openreview.net/forum?id=mteZOi0xyu)]
+- **December 2024**: Presented "LORE: Lagrangian-Optimized Robust Embeddings for Visual Encoders" at NeurIPS 2024 in San Diego
 
 ## Contact
 
