@@ -12,7 +12,7 @@ plugins:
   - jekyll-remote-theme
 
 # Sidebar info (for Minimal theme)
-logo: /assets/amirhossein.jpg
+logo: /assets/amirhossein.png
 show_downloads: false
 
 # Navigation

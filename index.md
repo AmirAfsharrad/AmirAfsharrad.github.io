@@ -16,9 +16,3 @@ Prior to Stanford, I received my B.Sc. in Electrical Engineering and Computer Sc
 
 - **January 2026**: Our paper "Beyond Binary Preferences: A Principled Framework for Reward Modeling with Ordinal Feedback" was accepted to ICLR 2026 [[paper](https://openreview.net/forum?id=mteZOi0xyu)]
 - **December 2024**: Presented "LORE: Lagrangian-Optimized Robust Embeddings for Visual Encoders" at NeurIPS 2024 in San Diego
-
----
-
-**Contact**
-
-[Email](mailto:afsharrad@stanford.edu) • [Google Scholar](https://scholar.google.com/citations?user=yuvhn2oAAAAJ) • [GitHub](https://github.com/amirafsharrad)
