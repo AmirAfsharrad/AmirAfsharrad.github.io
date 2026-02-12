@@ -24,6 +24,11 @@
         <p>{{ site.description | default: site.github.project_tagline }}</p>
 
         <p class="view">
+          <a href="{{ "/" | relative_url }}">Home</a><br>
+          <a href="{{ "/blog/" | relative_url }}">Blog</a>
+        </p>
+
+        <p class="view">
           <a href="mailto:{{ site.email }}">Email</a><br>
           <a href="https://scholar.google.com/citations?user=yuvhn2oAAAAJ" target="_blank">Google Scholar</a><br>
           <a href="https://github.com/amirafsharrad" target="_blank">GitHub</a>

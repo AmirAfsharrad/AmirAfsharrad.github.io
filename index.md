@@ -10,7 +10,7 @@ My current research primarily focuses on **post-training of large language model
 
 I am also interested in more theoretical problems in **optimization and reinforcement learning**, including bandit problems with safety constraints and multi-agent settings, as well as problems at the intersection of **optimization and control** such as applications of transformer models in control theory and autonomous systems. These areas were a primary focus earlier in my PhD, and I continue to work on projects in these directions.
 
-Prior to Stanford, I received my B.Sc. in Electrical Engineering and Computer Science from [Sharif University of Technology](http://www.sharif.ir/home), where I was advised by [Prof. Mohammadali Maddah-Ali](https://scholar.google.com/citations?user=CFIJZwoAAAAJ&hl=en).
+Prior to Stanford, I received my B.Sc. in Electrical Engineering and Computer Science from [Sharif University of Technology](http://www.sharif.ir/home), where I was advised by [Prof. Mohammadali Maddah-Ali](https://maddah.umn.edu/).
 
 ## News
 
