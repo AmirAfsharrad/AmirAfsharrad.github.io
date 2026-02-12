@@ -3,6 +3,8 @@ layout: home
 title: About
 ---
 
+<img src="assets/amirhossein.jpg" alt="Amirhossein Afsharrad" style="width: 250px; border-radius: 50%; display: block; margin: 0 auto 30px;">
+
 # Amirhossein Afsharrad
 
 I am a PhD candidate in [Electrical Engineering](https://ee.stanford.edu/) at [Stanford University](https://www.stanford.edu/), where I work on problems at the intersection of **optimization**, **control**, and **machine learning**.
