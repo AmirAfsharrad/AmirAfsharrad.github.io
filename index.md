@@ -7,11 +7,11 @@ title: About
   <img src="assets/signature.png" alt="Signature" style="position: fixed; bottom: 20px; right: 20px; width: 150px; opacity: 0.6; z-index: 1000;" onerror="this.style.display='none'">
 </div>
 
-<div style="display: flex; align-items: flex-start; gap: 30px; margin-bottom: 40px;">
+<div style="display: flex; align-items: flex-start; gap: 30px; margin-bottom: 20px;">
   <img src="assets/amirhossein.png" alt="Amirhossein Afsharrad" style="width: 200px; height: 200px; object-fit: cover;">
   <div>
-    <h1 style="margin-top: 0;">Amirhossein Afsharrad</h1>
-    <p style="margin: 5px 0;"><strong>PhD Candidate, Electrical Engineering</strong><br>
+    <h1 style="margin-top: 0;">Amir Afsharrad</h1>
+    <p style="margin: 5px 0;"><strong>PhD Candidate</strong><br>
     Stanford University</p>
     <p style="margin: 10px 0 0 0; line-height: 2;">
       <strong>Email:</strong> afsharrad@stanford.edu<br>
@@ -23,7 +23,9 @@ title: About
   </div>
 </div>
 
-## About
+<p style="font-size: 0.85em; color: #666; font-style: italic; margin-bottom: 30px;">
+  <em>*Note: You might see my name as either Amir or Amirhossein in different places. Both work! If you're confident in your pronunciation of the full version, go for it—otherwise, Amir is the easy button.</em>
+</p>
 
 I am a PhD candidate in [Electrical Engineering](https://ee.stanford.edu/) at [Stanford University](https://www.stanford.edu/), advised by [Professor Sanjay Lall](https://lall.stanford.edu/).
 
