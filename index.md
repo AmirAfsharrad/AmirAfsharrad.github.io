@@ -1,9 +1,8 @@
 ---
 layout: default
-title: About
 ---
 
-# About
+## About
 
 I am a PhD candidate in [Electrical Engineering](https://ee.stanford.edu/) at [Stanford University](https://www.stanford.edu/), advised by [Professor Sanjay Lall](https://lall.stanford.edu/).
 
@@ -18,12 +17,8 @@ Prior to Stanford, I received my B.Sc. in Electrical Engineering and Computer Sc
 - **January 2026**: Our paper "Beyond Binary Preferences: A Principled Framework for Reward Modeling with Ordinal Feedback" was accepted to ICLR 2026 [[paper](https://openreview.net/forum?id=mteZOi0xyu)]
 - **December 2024**: Presented "LORE: Lagrangian-Optimized Robust Embeddings for Visual Encoders" at NeurIPS 2024 in San Diego
 
-## Contact
-
-- **Email**: [afsharrad@stanford.edu](mailto:afsharrad@stanford.edu)
-- **Google Scholar**: [Profile](https://scholar.google.com/citations?user=yuvhn2oAAAAJ&hl=en)
-- **GitHub**: [amirafsharrad](https://github.com/amirafsharrad)
-
 ---
 
-*Last updated: February 2025*
+**Contact**
+
+[Email](mailto:afsharrad@stanford.edu) • [Google Scholar](https://scholar.google.com/citations?user=yuvhn2oAAAAJ) • [GitHub](https://github.com/amirafsharrad)
