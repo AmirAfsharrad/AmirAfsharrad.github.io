@@ -7,12 +7,11 @@ title: About
   <img src="assets/signature.png" alt="Signature" style="position: fixed; bottom: 20px; right: 20px; width: 150px; opacity: 0.6; z-index: 1000;" onerror="this.style.display='none'">
 </div>
 
-<div style="display: flex; align-items: flex-start; gap: 30px; margin-bottom: 20px;">
+<div style="display: flex; align-items: flex-start; gap: 30px; margin-bottom: 10px;">
   <img src="assets/amirhossein.png" alt="Amirhossein Afsharrad" style="width: 200px; height: 200px; object-fit: cover;">
   <div>
     <h1 style="margin-top: 0;">Amir Afsharrad</h1>
-    <p style="margin: 5px 0;"><strong>PhD Candidate</strong><br>
-    Stanford University</p>
+    <p style="margin: 5px 0;"><strong>PhD Candidate, Stanford University</strong></p>
     <p style="margin: 10px 0 0 0; line-height: 2;">
       <strong>Email:</strong> afsharrad@stanford.edu<br>
       <svg style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" viewBox="0 0 24 24"><path fill="currentColor" d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"/></svg>
@@ -23,7 +22,7 @@ title: About
   </div>
 </div>
 
-<p style="font-size: 0.85em; color: #666; font-style: italic; margin-bottom: 30px;">
+<p style="font-size: 0.85em; color: #666; font-style: italic; margin-bottom: 30px; margin-top: 5px;">
   <em>*Note: You might see my name as either Amir or Amirhossein in different places. Both work! If you're confident in your pronunciation of the full version, go for it—otherwise, Amir is the easy button.</em>
 </p>
 
