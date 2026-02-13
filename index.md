@@ -28,9 +28,9 @@ I am a PhD candidate in [Electrical Engineering](https://ee.stanford.edu/) at [S
 
 My current research primarily focuses on **post-training of large language models**, **LLM alignment with human preferences**, and **evaluation and reward modeling of LLMs**.
 
-I am also interested in more theoretical problems in **optimization and reinforcement learning**, including bandit problems with safety constraints and multi-agent settings, as well as problems at the intersection of **optimization and control** such as applications of transformer models in control theory and autonomous systems. These areas were a primary focus earlier in my PhD, and I continue to work on projects in these directions.
+I am also interested in more theoretical problems in **optimization and reinforcement learning**, including problems at the intersection of **optimization and control** such as applications of transformer models in control theory and autonomous systems, as well as bandit problems with safety constraints and multi-agent settings. These areas were a primary focus earlier in my PhD, and I continue to work on projects in these directions from time to time.
 
-Prior to Stanford, I received my B.Sc. in Electrical Engineering and Computer Science from [Sharif University of Technology](http://www.sharif.ir/home), where I was advised by [Prof. Mohammadali Maddah-Ali](https://maddah.umn.edu/).
+Prior to Stanford, I received my B.Sc. in Electrical Engineering and Computer Science from [Sharif University of Technology](https://en.sharif.ir/), where I was advised by [Prof. Mohammadali Maddah-Ali](https://maddah.umn.edu/).
 
 ## News
 
