@@ -3,10 +3,14 @@ layout: home
 title: About
 ---
 
+<div style="position: relative;">
+  <img src="assets/signature.png" alt="Signature" style="position: fixed; bottom: 20px; right: 20px; width: 150px; opacity: 0.6; z-index: 1000;" onerror="this.style.display='none'">
+</div>
+
 <div style="display: flex; align-items: flex-start; gap: 30px; margin-bottom: 10px;">
   <img src="assets/amirhossein.png" alt="Amirhossein Afsharrad" style="width: 200px; height: 200px; object-fit: cover;">
   <div>
-    <h1 style="margin-top: 0;">Amir<span style="color: #999;">hossein</span> Afsharrad</h1>
+    <h1 style="margin-top: 0;">Amir Afsharrad</h1>
     <p style="margin: 5px 0;"><strong>PhD Candidate, Stanford University</strong></p>
     <p style="margin: 10px 0 0 0; line-height: 2;">
       <strong>Email:</strong> afsharrad@stanford.edu<br>
