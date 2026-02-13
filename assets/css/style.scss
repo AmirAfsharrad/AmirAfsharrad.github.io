@@ -4,14 +4,15 @@
 @import "minima";
 
 /* Add signature to all pages */
-body::after {
+.site-footer::after {
   content: '';
+  display: block;
   position: fixed;
   bottom: 20px;
   right: 20px;
   width: 150px;
   height: 150px;
-  background-image: url('/assets/signature.png');
+  background-image: url('../signature.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
