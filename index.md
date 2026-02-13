@@ -23,7 +23,7 @@ title: About
 </div>
 
 <p style="font-size: 0.85em; color: #666; font-style: italic; margin-bottom: 30px; margin-top: 5px;">
-  <em>*Note: You might see my name as either Amir or Amirhossein in different places. Both work! If you're confident in your pronunciation of the full version, go for it—otherwise, Amir is the easy button.</em>
+  <em>*Note: You might see my name as either Amir or Amirhossein in different places. Both work! If you're confident in your pronunciation of the full version, go for it - otherwise, Amir is the easy button.</em>
 </p>
 
 I am a PhD candidate in [Electrical Engineering](https://ee.stanford.edu/) at [Stanford University](https://www.stanford.edu/), advised by [Professor Sanjay Lall](https://lall.stanford.edu/).
@@ -37,4 +37,5 @@ Prior to Stanford, I received my B.Sc. in Electrical Engineering and Computer Sc
 ## News
 
 - **January 2026**: Our paper "Beyond Binary Preferences: A Principled Framework for Reward Modeling with Ordinal Feedback" was accepted to ICLR 2026 [[paper](https://openreview.net/forum?id=mteZOi0xyu)]
+- **January 2026**: Our paper "Multi-Agent Stage-wise Conservative Linear Bandits" was accepted to ACC 2026 [[paper](https://arxiv.org/abs/2510.00602)]
 - **December 2024**: Presented "LORE: Lagrangian-Optimized Robust Embeddings for Visual Encoders" at NeurIPS 2024 in San Diego
