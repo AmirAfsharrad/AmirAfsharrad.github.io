@@ -1,0 +1,21 @@
+---
+---
+
+@import "minima";
+
+/* Add signature to all pages */
+body::after {
+  content: '';
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 150px;
+  height: 150px;
+  background-image: url('/assets/signature.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.6;
+  z-index: 1000;
+  pointer-events: none;
+}
