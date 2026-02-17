@@ -17,6 +17,7 @@ plugins:
 # Navigation
 header_pages:
   - index.md
+  - cv.md
   - blog.md
 
 # Collections
