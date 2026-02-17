@@ -34,6 +34,6 @@ Prior to Stanford, I received my B.Sc. in Electrical Engineering and Computer Sc
 
 ## News
 
-- **January 2026**: Our paper "Beyond Binary Preferences: A Principled Framework for Reward Modeling with Ordinal Feedback" was accepted to ICLR 2026 [[paper](https://openreview.net/forum?id=mteZOi0xyu)]
+- **January 2026**: Our paper "Beyond Binary Preferences: A Principled Framework for Reward Modeling with Ordinal Feedback" was accepted to ICLR 2026 [[paper](https://openreview.net/pdf?id=mteZOi0xyu)]
 - **January 2026**: Our paper "Multi-Agent Stage-wise Conservative Linear Bandits" was accepted to ACC 2026 [[paper](https://arxiv.org/abs/2510.00602)]
-- **December 2024**: Presented "LORE: Lagrangian-Optimized Robust Embeddings for Visual Encoders" at NeurIPS 2024 in San Diego [[paper](https://arxiv.org/abs/2505.18884)]
+- **December 2025**: Presented "LORE: Lagrangian-Optimized Robust Embeddings for Visual Encoders" at NeurIPS 2024 in San Diego [[paper](https://arxiv.org/abs/2505.18884)]
