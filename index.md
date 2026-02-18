@@ -1,7 +1,9 @@
 ---
 layout: page
-title: ""
+title: "Home"
 ---
+
+<style> .post-title, .page-title { display: none; } </style>
 
 <img src="assets/signature.png" alt="" style="position: fixed; bottom: 20px; right: 20px; width: 150px; opacity: 0.6; z-index: 1000; pointer-events: none;">
 
