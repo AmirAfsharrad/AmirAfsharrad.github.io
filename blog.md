@@ -8,9 +8,9 @@ permalink: /blog/
 
 {% for post in site.posts %}
 ### [{{ post.title }}]({{ post.url | relative_url }})
-*{{ post.date | date: "%B %-d, %Y" }}*
+<span style="color: #999; font-size: 0.85em;">{{ post.date | date: "%B %-d, %Y" }} &nbsp;·&nbsp; 15-minute read</span>
 
-{{ post.excerpt }}
+{% if post.description %}*{{ post.description }}*{% endif %}
 
 [Read more →]({{ post.url | relative_url }})
 
