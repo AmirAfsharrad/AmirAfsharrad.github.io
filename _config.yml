@@ -1,7 +1,7 @@
 # Site settings
 title: Amirhossein Afsharrad
 email: afsharrad@stanford.edu
-description: EE PhD Candidate at Stanford University
+description: "EE PhD Candidate<br>Stanford University"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://amirafsharrad.github.io" # the base hostname & protocol for your site
 
