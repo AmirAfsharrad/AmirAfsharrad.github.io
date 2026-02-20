@@ -8,11 +8,27 @@ url: "https://amirafsharrad.github.io" # the base hostname & protocol for your s
 # Google Analytics
 google_analytics: G-WCZCMVFCPD
 
+# SEO settings
+author:
+  name: Amirhossein Afsharrad
+  email: afsharrad@stanford.edu
+
+social:
+  name: Amirhossein Afsharrad
+  links:
+    - https://github.com/amirafsharrad
+    - https://www.linkedin.com/in/afsharrad/
+    - https://scholar.google.com/citations?user=yuvhn2oAAAAJ
+
+lang: en_US
+tagline: "PhD Candidate in Electrical Engineering at Stanford University"
+
 # Build settings
 markdown: kramdown
 theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-seo-tag
 
 # Navigation
 header_pages:
