@@ -17,6 +17,7 @@ plugins:
 # Navigation
 header_pages:
   - index.md
+  - teaching.md
   - cv.md
   - blog.md
 
@@ -25,6 +26,9 @@ collections:
   posts:
     output: true
     permalink: /blog/:year/:title/
+  teaching:
+    output: true
+    permalink: /teaching/:name/
 
 # Exclude from processing
 exclude:
