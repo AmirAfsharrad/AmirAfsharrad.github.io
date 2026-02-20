@@ -6,7 +6,7 @@ permalink: /research/
 
 <img src="/assets/signature.png" alt="" style="position: fixed; bottom: 20px; right: 20px; width: 150px; opacity: 0.6; z-index: 1000; pointer-events: none;">
 
-<img src="/assets/research-banner.jpg" alt="Research" style="float: right; width: 50%; margin-left: 30px; margin-bottom: 20px;">
+<img src="/assets/research-banner.jpg" alt="Research" style="width: 75%; display: block; margin: 0 auto 24px auto;">
 
 I'm planning to add some notes here to explain some of my more interesting research projects. In the meantime, I'm just putting a number of selected publications here, categorized under some of my broader research categories. For a full list of my publications, see [Google Scholar](https://scholar.google.com/citations?user=yuvhn2oAAAAJ&hl=en).
 
