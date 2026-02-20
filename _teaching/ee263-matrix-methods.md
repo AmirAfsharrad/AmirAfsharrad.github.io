@@ -7,6 +7,7 @@ years: "Summer 2023, 2024, 2025"
 thumbnail: /assets/teaching/ee263-thumbnail.jpg
 description: "A comprehensive course on linear algebra and matrix methods for engineers, covering topics including SVD, least squares, and foundations of linear dynamical systems."
 order: 2
+category: course
 ---
 
 <img src="/assets/signature.png" alt="" style="position: fixed; bottom: 20px; right: 20px; width: 150px; opacity: 0.6; z-index: 1000; pointer-events: none;">
