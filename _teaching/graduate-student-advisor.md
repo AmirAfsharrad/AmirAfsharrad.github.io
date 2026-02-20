@@ -12,16 +12,13 @@ category: service
 
 <img src="/assets/signature.png" alt="" style="position: fixed; bottom: 20px; right: 20px; width: 150px; opacity: 0.6; z-index: 1000; pointer-events: none;">
 
-<div style="display: flex; align-items: flex-start; gap: 30px; margin-bottom: 30px;">
-  <div style="flex: 1;">
-    <p>I have been serving as the Graduate Student Advisor (a.k.a. the Grad TA) since 2024, where I am a point of contact between the department and the graduate student body of the EE department. I support grad students with a variety of matters ranging from student life, MS or PhD program requirements, MS proposal, finding TA/RA positions, finding research advisors, the PhD rotation program, and more. As the Grad TA, I also serve as a student member of the Academic Affairs Committee (AAC) at the EE Department.</p>
+<img src="/assets/teaching/gsa-banner.jpg" alt="Graduate Student Advisor" style="float: right; width: 50%; margin-left: 30px; margin-bottom: 20px;">
 
-    <p>I am also a primary point of contact for the department's course assistants (CAs) and graders, holding the orientation, organizing the CA workshops, and supporting them with needs or questions that they might have.</p>
+I have been serving as the Graduate Student Advisor (a.k.a. the Grad TA) since 2024, where I am a point of contact between the department and the graduate student body of the EE department. I support grad students with a variety of matters ranging from student life, MS or PhD program requirements, MS proposal, finding TA/RA positions, finding research advisors, the PhD rotation program, and more. As the Grad TA, I also serve as a student member of the Academic Affairs Committee (AAC) at the EE Department.
 
-    <p>I regularly host walk-in office hours, and office hours can also be booked via Calendly.</p>
-  </div>
-  <img src="/assets/teaching/gsa-banner.jpg" alt="Graduate Student Advisor" style="flex: 1; max-width: 50%; object-fit: cover;">
-</div>
+I am also a primary point of contact for the department's course assistants (CAs) and graders, holding the orientation, organizing the CA workshops, and supporting them with needs or questions that they might have.
+
+I regularly host walk-in office hours, and office hours can also be booked via Calendly.
 
 ## Office Hours (Winter 2025-26)
 
