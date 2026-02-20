@@ -3,6 +3,7 @@ layout: post
 title: "Notes from the Other Side of the Application Table"
 date: 2026-02-12
 description: "Lessons on preparing a strong MS/PhD application, drawn from reviewing 50 applications as part of the Stanford MSEE reading committee."
+image: /assets/blog-application-table.png
 ---
 
 <img src="/assets/signature.png" alt="" style="position: fixed; bottom: 20px; right: 20px; width: 150px; opacity: 0.6; z-index: 1000; pointer-events: none;">
