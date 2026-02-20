@@ -10,7 +10,7 @@ I'm planning to add some notes here to explain some of my more interesting resea
 
 ---
 
-## Post-training and Alignment of Large Language Models
+### Post-training and Alignment of Large Language Models
 
 **Beyond Binary Preferences: A Principled Framework for Reward Modeling with Ordinal Feedback**
 A Afsharrad, R Zhou, L Viano, S Lall, M Ghavamzadeh
@@ -20,18 +20,20 @@ A Afsharrad, R Zhou, L Viano, S Lall, M Ghavamzadeh
 **One Goal, Many Challenges: Robust Preference Optimization Amid Content-Aware and Multi-Source Noise**
 A Afzali, A Afsharrad, SS Mousavi, S Lall
 *Reinforcement Learning Journal 2025*
+[Paper](https://arxiv.org/abs/2503.12301)
 
 ---
 
-## ML-Based Control and Optimization
+### ML-Based Control and Optimization
 
 **Generalizable Spacecraft Trajectory Generation via Multimodal Learning with Transformers**
 D Celestini, A Afsharrad, D Gammelli, T Guffanti, G Zardini, S Lall, E Capello, S D'Amico, M Pavone
 *2025 American Control Conference (ACC 2025)*
+[Paper](https://arxiv.org/abs/2410.11723)
 
 ---
 
-## Constrained Linear Bandits
+### Constrained Linear Bandits
 
 **Convex Methods for Constrained Linear Bandits**
 A Afsharrad, A Moradipari, S Lall
@@ -45,7 +47,7 @@ A Afsharrad, P Oftadeh, A Moradipari, S Lall
 
 ---
 
-## Miscellaneous
+### Miscellaneous
 
 **LORE: Lagrangian-Optimized Robust Embeddings for Visual Encoders**
 B Khodabandeh, A Afzali, A Afsharrad, SS Mousavi, S Lall, S Amini, SM Moosavi-Dezfooli
