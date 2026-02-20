@@ -5,7 +5,7 @@ short_title: "Foundations of Machine Learning"
 subtitle: "Summer Mini-Course"
 years: "Summer 2021"
 thumbnail: /assets/teaching/ml-thumbnail.jpg
-description: "A summer mini-course covering the mathematical foundations of machine learning, including probability, optimization, learning theory and guarantees, supervised and unsupervised learning techniques, and reinforcement learning."
+description: "A summer mini-course covering the mathematical foundations of machine learning, including probability, optimization, learning theory, supervised and unsupervised learning, and reinforcement learning."
 order: 3
 category: course
 ---
