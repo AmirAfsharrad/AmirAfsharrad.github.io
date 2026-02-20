@@ -4,57 +4,50 @@ title: Research
 permalink: /research/
 ---
 
-# Research & Publications
+<img src="/assets/signature.png" alt="" style="position: fixed; bottom: 20px; right: 20px; width: 150px; opacity: 0.6; z-index: 1000; pointer-events: none;">
 
-My research focuses on developing principled methods for decision-making under uncertainty, with applications in autonomous systems, finance, and robotics.
+I'm planning to add some notes here to explain some of my more interesting research projects. In the meantime, I'm just putting a number of selected publications here, categorized under some of my broader research categories. For a full list of my publications, see [Google Scholar](https://scholar.google.com/citations?user=yuvhn2oAAAAJ&hl=en).
 
-## Selected Publications
+---
 
-### 2025
+## Post-training and Alignment of Large Language Models
+
+**Beyond Binary Preferences: A Principled Framework for Reward Modeling with Ordinal Feedback**
+A Afsharrad, R Zhou, L Viano, S Lall, M Ghavamzadeh
+*The Fourteenth International Conference on Learning Representations (ICLR 2026)*
+[Paper](https://openreview.net/pdf?id=mteZOi0xyu)
+
+**One Goal, Many Challenges: Robust Preference Optimization Amid Content-Aware and Multi-Source Noise**
+A Afzali, A Afsharrad, SS Mousavi, S Lall
+*Reinforcement Learning Journal 2025*
+
+---
+
+## ML-Based Control and Optimization
 
 **Generalizable Spacecraft Trajectory Generation via Multimodal Learning with Transformers**
-Authors TBD
-*Preprint, 2025*
-[Paper](#) | [Code](#)
+D Celestini, A Afsharrad, D Gammelli, T Guffanti, G Zardini, S Lall, E Capello, S D'Amico, M Pavone
+*2025 American Control Conference (ACC 2025)*
 
-**Cooperative Multi-Agent Constrained Stochastic Linear Bandits**
-Authors TBD
-*Submitted, 2025*
-[Paper](#) | [Code](#)
+---
 
-### 2023
+## Constrained Linear Bandits
 
 **Convex Methods for Constrained Linear Bandits**
-Authors TBD
-*arXiv:2311.04338, 2023*
-[Paper](https://arxiv.org/abs/2311.04338) | [Code](#)
+A Afsharrad, A Moradipari, S Lall
+*2024 European Control Conference (ECC 2024)*
+[Paper](https://arxiv.org/abs/2311.04338)
 
-### 2022
-
-**Unsupervised Aggregation of Deep Models**
-Amirhossein Afsharrad
-*CS231n Course Project, Stanford University, 2022*
-[Report](https://cs231n.stanford.edu/reports/2022/pdfs/152p.pdf)
+**Cooperative Multi-Agent Constrained Stochastic Linear Bandits**
+A Afsharrad, P Oftadeh, A Moradipari, S Lall
+*2025 American Control Conference (ACC 2025)*
+[Paper](https://arxiv.org/abs/2510.00602)
 
 ---
 
-## Research Interests
+## Miscellaneous
 
-- **Optimization & Control**: Convex optimization, distributed optimization, control of linear dynamical systems
-- **Reinforcement Learning**: Bandits, safe reinforcement learning, multi-agent systems
-- **Machine Learning**: Deep learning, unsupervised learning, generalization theory
-- **Applications**: Autonomous systems, spacecraft guidance, financial optimization
-
----
-
-## Collaborations
-
-I am fortunate to collaborate with:
-- [Stanford Lall Group](https://lall.stanford.edu/)
-- [Stanford Tse Lab](https://tselab.stanford.edu/)
-- Wells Fargo (industry collaboration)
-- Toyota Research Institute (industry collaboration)
-
----
-
-*For the most up-to-date list of publications, please visit my [Google Scholar profile](https://scholar.google.com/citations?user=yuvhn2oAAAAJ&hl=en).*
+**LORE: Lagrangian-Optimized Robust Embeddings for Visual Encoders**
+B Khodabandeh, A Afzali, A Afsharrad, SS Mousavi, S Lall, S Amini, SM Moosavi-Dezfooli
+*The Thirty-ninth Annual Conference on Neural Information Processing Systems (NeurIPS 2024)*
+[Paper](https://arxiv.org/abs/2505.18884)
