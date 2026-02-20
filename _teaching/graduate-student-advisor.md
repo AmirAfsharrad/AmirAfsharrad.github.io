@@ -5,7 +5,7 @@ short_title: "Graduate Student Advisor"
 subtitle: "Stanford EE Department"
 years: "2024 – Present"
 thumbnail: /assets/teaching/gsa-thumbnail.jpg
-description: "A resource for the Stanford EE graduate student body, offering guidance on grad student life, MS requirements, TA/RA positions, research advisors, the PhD rotation program, and more."
+description: "An official resource for the Stanford EE graduate student body, offering guidance on grad student life, MS requirements, TA/RA positions, research advisors, the PhD rotation program, and more."
 order: 1
 category: service
 ---
