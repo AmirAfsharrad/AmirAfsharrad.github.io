@@ -17,7 +17,7 @@ I'm planning to add some notes here to explain some of my more interesting resea
 **Beyond Binary Preferences: A Principled Framework for Reward Modeling with Ordinal Feedback**
 A Afsharrad, R Zhou, L Viano, S Lall, M Ghavamzadeh
 *The Fourteenth International Conference on Learning Representations (ICLR 2026)*
-[Paper](https://openreview.net/pdf?id=mteZOi0xyu)
+[Paper](https://arxiv.org/abs/2603.02232)
 
 **One Goal, Many Challenges: Robust Preference Optimization Amid Content-Aware and Multi-Source Noise**
 A Afzali, A Afsharrad, SS Mousavi, S Lall
