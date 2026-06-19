@@ -1,30 +1,47 @@
 :root {
   color-scheme: light;
-  --bg: #f6f7f9;
+  --bg: #f4f8ff;
   --panel: #ffffff;
-  --panel-soft: #fafafa;
-  --text: #1f2328;
-  --muted: #666f7a;
-  --line: #dfe3e8;
-  --line-strong: #c9d0d8;
-  --accent: #2364aa;
-  --accent-dark: #184f87;
-  --success: #1f8f4d;
+  --panel-soft: #f8fbff;
+  --panel-tint: #eaf3ff;
+  --text: #0b1f3a;
+  --muted: #52657a;
+  --line: #d8e6f5;
+  --line-strong: #b8cbe1;
+  --accent: #0b3a75;
+  --accent-dark: #082b59;
+  --accent-hover: #0e4a94;
+  --teal: #0f766e;
+  --teal-soft: #e7f6f3;
+  --gold: #9a6a18;
+  --success: #047857;
   --danger: #b3261e;
-  --warning: #8a5b00;
-  --shadow: 0 8px 24px rgba(31, 35, 40, 0.08);
+  --danger-soft: #fff1ef;
+  --shadow: 0 14px 40px rgba(11, 58, 117, 0.08);
+  --shadow-small: 0 6px 18px rgba(11, 58, 117, 0.07);
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
+html {
+  min-height: 100%;
   background: var(--bg);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: linear-gradient(180deg, #fbfdff 0%, var(--bg) 46%, #eef5ff 100%);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(15, 118, 110, 0.18);
 }
 
 button,
@@ -35,39 +52,60 @@ select {
 }
 
 button {
+  min-height: 38px;
   border: 1px solid var(--line-strong);
+  border-radius: 8px;
   background: var(--panel);
   color: var(--text);
-  min-height: 38px;
-  padding: 8px 12px;
-  border-radius: 8px;
   cursor: pointer;
+  padding: 8px 12px;
+  box-shadow: 0 1px 0 rgba(11, 31, 58, 0.03);
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
 }
 
 button:hover {
   border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: var(--shadow-small);
+  transform: translateY(-1px);
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(15, 118, 110, 0.18);
+  outline-offset: 2px;
 }
 
 button.primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--teal) 100%);
+  border-color: transparent;
   color: #fff;
 }
 
 button.primary:hover {
-  background: var(--accent-dark);
+  background: linear-gradient(135deg, var(--accent-hover) 0%, #11847a 100%);
+  color: #fff;
 }
 
-button.danger {
+button.danger,
+button.danger-soft {
   color: var(--danger);
+}
+
+button.danger-soft {
+  background: var(--danger-soft);
+  border-color: rgba(179, 38, 30, 0.24);
 }
 
 button.ghost {
   background: transparent;
+  box-shadow: none;
 }
 
 button.segment-active {
-  background: #e8f1fb;
+  background: linear-gradient(135deg, var(--panel-tint) 0%, var(--teal-soft) 100%);
   border-color: var(--accent);
   color: var(--accent-dark);
 }
@@ -76,12 +114,21 @@ input,
 textarea,
 select {
   width: 100%;
+  min-height: 40px;
   border: 1px solid var(--line-strong);
   border-radius: 8px;
   background: #fff;
   color: var(--text);
-  min-height: 40px;
   padding: 8px 10px;
+  box-shadow: inset 0 1px 2px rgba(11, 31, 58, 0.03);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
 }
 
 textarea {
@@ -94,6 +141,13 @@ label {
   gap: 6px;
   color: var(--muted);
   font-size: 0.9rem;
+  font-weight: 600;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 16px 0;
 }
 
 .auth-page {
@@ -104,23 +158,60 @@ label {
 }
 
 .auth-card {
+  position: relative;
   width: min(440px, 100%);
-  background: var(--panel);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: var(--shadow);
-  padding: 28px;
+  padding: 30px;
+}
+
+.auth-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--teal), var(--gold));
 }
 
 .brand {
   display: grid;
-  gap: 6px;
+  gap: 10px;
   margin-bottom: 22px;
+}
+
+.brand-lockup,
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--teal) 100%);
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(11, 58, 117, 0.2);
+}
+
+.brand-mark.small {
+  width: 28px;
+  height: 28px;
+  font-size: 0.92rem;
+  box-shadow: none;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: clamp(2rem, 6vw, 3rem);
+  font-size: 2.7rem;
+  line-height: 1;
   letter-spacing: 0;
 }
 
@@ -138,8 +229,23 @@ label {
   gap: 8px;
 }
 
+.auth-switch,
+.tab-row,
+.direction-row {
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+}
+
 .auth-switch {
   margin-bottom: 18px;
+}
+
+.auth-switch button,
+.tab-row button,
+.direction-row button {
+  box-shadow: none;
 }
 
 .stack {
@@ -158,7 +264,7 @@ label {
 .message.error {
   color: var(--danger);
   border-color: rgba(179, 38, 30, 0.3);
-  background: #fff7f6;
+  background: var(--danger-soft);
 }
 
 .shell {
@@ -171,9 +277,10 @@ label {
   position: sticky;
   top: 0;
   z-index: 5;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
+  background: rgba(244, 248, 255, 0.9);
   border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 24px rgba(11, 58, 117, 0.04);
 }
 
 .topbar-inner {
@@ -187,8 +294,8 @@ label {
 }
 
 .wordmark {
-  font-weight: 700;
-  font-size: 1.2rem;
+  font-weight: 800;
+  font-size: 1.18rem;
 }
 
 .userline {
@@ -204,28 +311,30 @@ label {
   margin: 0 auto;
   padding: 22px 18px 48px;
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 292px minmax(0, 1fr);
   gap: 20px;
 }
 
 .sidebar,
 .panel {
-  background: var(--panel);
+  background: rgba(255, 255, 255, 0.95);
   border: 1px solid var(--line);
   border-radius: 8px;
+  box-shadow: var(--shadow);
 }
 
 .sidebar {
   padding: 16px;
   align-self: start;
   position: sticky;
-  top: 76px;
+  top: 80px;
 }
 
 .sidebar h2,
 .panel h2,
 .panel h3 {
   margin-top: 0;
+  color: var(--text);
 }
 
 .list-button {
@@ -234,6 +343,8 @@ label {
   display: grid;
   gap: 2px;
   margin-bottom: 8px;
+  background: linear-gradient(180deg, #fff 0%, var(--panel-soft) 100%);
+  box-shadow: none;
 }
 
 .list-button strong,
@@ -241,6 +352,10 @@ label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.list-button strong {
+  color: var(--text);
 }
 
 .muted,
@@ -259,7 +374,7 @@ label {
 }
 
 .panel {
-  padding: 18px;
+  padding: 20px;
 }
 
 .panel-header {
@@ -267,7 +382,9 @@ label {
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
 }
 
 .panel-header h2 {
@@ -287,30 +404,51 @@ label {
 }
 
 .metric {
+  min-width: 0;
   border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
   border-radius: 8px;
-  background: var(--panel-soft);
+  background: linear-gradient(180deg, #fff 0%, var(--panel-soft) 100%);
   padding: 12px;
+}
+
+.grid-four .metric:nth-child(2) {
+  border-top-color: var(--teal);
+}
+
+.grid-four .metric:nth-child(3) {
+  border-top-color: var(--gold);
+}
+
+.grid-four .metric:nth-child(4) {
+  border-top-color: var(--success);
 }
 
 .metric strong {
   display: block;
+  color: var(--text);
   font-size: 1.45rem;
+  line-height: 1.2;
 }
 
 .practice-card {
+  min-height: 260px;
   border: 1px solid var(--line-strong);
   border-radius: 8px;
-  min-height: 260px;
   display: grid;
   place-items: center;
   text-align: center;
-  padding: 28px;
-  background: #fff;
+  padding: 30px;
+  background: linear-gradient(180deg, #fff 0%, var(--panel-soft) 60%, var(--panel-tint) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.practice-card > div {
+  width: min(100%, 740px);
 }
 
 .prompt {
-  font-size: clamp(2rem, 8vw, 4.4rem);
+  font-size: 4rem;
   line-height: 1.1;
   letter-spacing: 0;
   overflow-wrap: anywhere;
@@ -318,15 +456,47 @@ label {
 
 .answer {
   margin-top: 18px;
-  color: var(--accent-dark);
-  font-size: clamp(1.35rem, 5vw, 2.5rem);
+  color: var(--teal);
+  font-size: 2rem;
   overflow-wrap: anywhere;
+}
+
+.listen-button {
+  min-height: 32px;
+  margin-top: 12px;
+  padding: 6px 10px;
+  background: var(--teal-soft);
+  border-color: rgba(15, 118, 110, 0.26);
+  color: var(--teal);
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.listen-button:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+  box-shadow: none;
+  transform: none;
+}
+
+.table-listen {
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+.cell-with-action {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px;
 }
 
 .table-wrap {
   overflow-x: auto;
   border: 1px solid var(--line);
   border-radius: 8px;
+  background: var(--panel);
 }
 
 table {
@@ -337,7 +507,7 @@ table {
 
 th,
 td {
-  padding: 10px 12px;
+  padding: 11px 12px;
   border-bottom: 1px solid var(--line);
   text-align: left;
   vertical-align: top;
@@ -346,7 +516,7 @@ td {
 th {
   color: var(--muted);
   font-size: 0.86rem;
-  font-weight: 600;
+  font-weight: 700;
   background: var(--panel-soft);
 }
 
@@ -377,13 +547,14 @@ tr:last-child td {
 .bar-track {
   height: 10px;
   border-radius: 999px;
-  background: #edf0f3;
+  background: #edf3fa;
   overflow: hidden;
 }
 
 .bar-fill {
+  display: block;
   height: 100%;
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--accent), var(--teal));
 }
 
 @media (max-width: 860px) {
@@ -408,5 +579,40 @@ tr:last-child td {
 
   .userline {
     justify-content: space-between;
+  }
+
+  .prompt {
+    font-size: 2.6rem;
+  }
+
+  .answer {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .auth-card,
+  .panel,
+  .sidebar {
+    padding: 16px;
+  }
+
+  .brand h1 {
+    font-size: 2.2rem;
+  }
+
+  .tab-row button,
+  .direction-row button,
+  .auth-switch button,
+  .action-row button {
+    flex: 1 1 auto;
+  }
+
+  .cell-with-action {
+    grid-template-columns: 1fr;
+  }
+
+  .table-listen {
+    width: max-content;
   }
 }

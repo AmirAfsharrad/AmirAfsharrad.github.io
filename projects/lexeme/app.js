@@ -1,6 +1,33 @@
 const API_BASE = "https://personal-backend-production-0d2e.up.railway.app";
 const TOKEN_KEY = "lexeme_token";
 
+const LANGUAGE_CODES = {
+  arabic: "ar",
+  chinese: "zh-CN",
+  danish: "da-DK",
+  dutch: "nl-NL",
+  english: "en-US",
+  farsi: "fa-IR",
+  french: "fr-FR",
+  german: "de-DE",
+  greek: "el-GR",
+  hebrew: "he-IL",
+  hindi: "hi-IN",
+  italian: "it-IT",
+  japanese: "ja-JP",
+  korean: "ko-KR",
+  mandarin: "zh-CN",
+  norwegian: "nb-NO",
+  persian: "fa-IR",
+  polish: "pl-PL",
+  portuguese: "pt-PT",
+  "brazilian portuguese": "pt-BR",
+  russian: "ru-RU",
+  spanish: "es-ES",
+  swedish: "sv-SE",
+  turkish: "tr-TR",
+};
+
 const state = {
   token: localStorage.getItem(TOKEN_KEY),
   user: null,
@@ -55,6 +82,72 @@ function directionLabel(direction) {
 
 function selectedList() {
   return state.lists.find((list) => list.id === state.selectedListId) || null;
+}
+
+function languageCodeFromLabel(label, fallback = "en-US") {
+  const raw = String(label || "").trim();
+  if (!raw) return fallback;
+  if (/^[a-z]{2,3}(-[a-z0-9]{2,8})?$/i.test(raw)) return raw.replace("_", "-");
+
+  const normalized = raw
+    .toLowerCase()
+    .replace(/_/g, "-")
+    .replace(/[^a-z0-9 -]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (LANGUAGE_CODES[normalized]) return LANGUAGE_CODES[normalized];
+
+  const match = Object.entries(LANGUAGE_CODES).find(([name]) => normalized.includes(name));
+  return match ? match[1] : fallback;
+}
+
+function speechSupported() {
+  return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+}
+
+function voiceForLanguage(languageCode) {
+  const voices = window.speechSynthesis.getVoices?.() || [];
+  const normalized = languageCode.toLowerCase();
+  const languageRoot = normalized.split("-")[0];
+  return (
+    voices.find((voice) => voice.lang.toLowerCase() === normalized) ||
+    voices.find((voice) => voice.lang.toLowerCase().startsWith(`${languageRoot}-`)) ||
+    null
+  );
+}
+
+function speakText(text, languageLabel) {
+  const value = String(text || "").trim();
+  if (!value) return;
+
+  if (!speechSupported()) {
+    setMessage("Pronunciation is not supported in this browser.", true);
+    render();
+    return;
+  }
+
+  const languageCode = languageCodeFromLabel(languageLabel);
+  const utterance = new SpeechSynthesisUtterance(value);
+  utterance.lang = languageCode;
+  utterance.rate = 0.9;
+
+  const voice = voiceForLanguage(languageCode);
+  if (voice) utterance.voice = voice;
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
+
+function languageForSide(side) {
+  const list = selectedList();
+  if (!list) return "English";
+  return side === "target" ? list.target_language || "Target" : list.source_language || "English";
+}
+
+function cardSideForRole(role) {
+  if (role === "answer") return state.direction === "target_to_source" ? "source" : "target";
+  return state.direction === "target_to_source" ? "target" : "source";
 }
 
 function setMessage(message, isError = false) {
@@ -149,7 +242,7 @@ async function loadSelectedStats() {
 
 function render() {
   if (state.loading && !state.user) {
-    app.innerHTML = `<div class="auth-page"><div class="auth-card"><div class="brand"><h1>Lexeme</h1><p>Loading...</p></div></div></div>`;
+    app.innerHTML = `<div class="auth-page"><div class="auth-card"><div class="brand"><div class="brand-lockup"><span class="brand-mark">L</span><h1>Lexeme</h1></div><p>Loading...</p></div></div></div>`;
     return;
   }
 
@@ -169,7 +262,10 @@ function renderAuth() {
     <main class="auth-page">
       <section class="auth-card">
         <div class="brand">
-          <h1>Lexeme</h1>
+          <div class="brand-lockup">
+            <span class="brand-mark">L</span>
+            <h1>Lexeme</h1>
+          </div>
           <p>Store expressions, practice both directions, and track what sticks.</p>
         </div>
         ${state.error ? `<div class="message error">${escapeHtml(state.error)}</div>` : ""}
@@ -201,7 +297,7 @@ function renderDashboard() {
       <header class="topbar">
         <div class="topbar-inner">
           <div>
-            <div class="wordmark">Lexeme</div>
+            <div class="wordmark"><span class="brand-mark small">L</span><span>Lexeme</span></div>
             <div class="muted">Private learning workspace</div>
           </div>
           <div class="userline">
@@ -301,8 +397,10 @@ function renderPractice() {
           <div>
             <div class="muted">${directionLabel(card.direction)}</div>
             <div class="prompt">${escapeHtml(card.prompt)}</div>
+            <button type="button" class="listen-button" data-action="speak-card" data-card-role="prompt" title="Play pronunciation">Listen</button>
             ${card.revealed ? `
               <div class="answer">${escapeHtml(card.answer)}</div>
+              <button type="button" class="listen-button" data-action="speak-card" data-card-role="answer" title="Play pronunciation">Listen</button>
               <p class="muted">Recorded as ${escapeHtml(card.outcome)}.</p>
             ` : `<p class="muted">Decide whether you remembered the answer, then reveal it.</p>`}
           </div>
@@ -315,8 +413,8 @@ function renderPractice() {
       </div>
       <div class="action-row">
         ${card && !card.revealed ? `
-          <button type="button" class="primary" data-action="answer-card" data-outcome="success">✓ Got it</button>
-          <button type="button" data-action="answer-card" data-outcome="fail">× Missed</button>
+          <button type="button" class="primary" data-action="answer-card" data-outcome="success">Got it</button>
+          <button type="button" class="danger-soft" data-action="answer-card" data-outcome="fail">Missed</button>
           <button type="button" data-action="answer-card" data-outcome="skip">Skip</button>
         ` : `
           <button type="button" class="primary" data-action="next-card">${card ? "Next card" : "Start practice"}</button>
@@ -379,8 +477,18 @@ function renderItemRow(item) {
 
   return `
     <tr>
-      <td>${escapeHtml(item.target_text)}</td>
-      <td>${escapeHtml(item.source_text)}</td>
+      <td>
+        <div class="cell-with-action">
+          <span>${escapeHtml(item.target_text)}</span>
+          <button type="button" class="listen-button table-listen" data-action="speak-item" data-item-id="${item.id}" data-side="target" title="Play pronunciation">Listen</button>
+        </div>
+      </td>
+      <td>
+        <div class="cell-with-action">
+          <span>${escapeHtml(item.source_text)}</span>
+          <button type="button" class="listen-button table-listen" data-action="speak-item" data-item-id="${item.id}" data-side="source" title="Play pronunciation">Listen</button>
+        </div>
+      </td>
       <td>${formatDate(item.updated_at)}</td>
       <td>
         <div class="row-actions">
@@ -540,6 +648,8 @@ async function handleAction(event) {
     if (action === "set-direction") return setDirection(event.currentTarget.dataset.direction);
     if (action === "next-card") return await loadNextCard();
     if (action === "answer-card") return await answerCard(event.currentTarget.dataset.outcome);
+    if (action === "speak-card") return speakCard(event.currentTarget.dataset.cardRole);
+    if (action === "speak-item") return speakItem(event.currentTarget.dataset.itemId, event.currentTarget.dataset.side);
     if (action === "edit-item") return editItem(event.currentTarget.dataset.itemId);
     if (action === "cancel-edit") return cancelEdit();
     if (action === "delete-item") return await deleteItem(event.currentTarget.dataset.itemId);
@@ -547,6 +657,19 @@ async function handleAction(event) {
     setMessage(error.message, true);
     render();
   }
+}
+
+function speakCard(role) {
+  if (!state.currentCard) return;
+  const side = cardSideForRole(role);
+  const text = role === "answer" ? state.currentCard.answer : state.currentCard.prompt;
+  speakText(text, languageForSide(side));
+}
+
+function speakItem(itemId, side) {
+  const item = state.items.find((row) => row.id === itemId);
+  if (!item) return;
+  speakText(side === "target" ? item.target_text : item.source_text, languageForSide(side));
 }
 
 async function refresh() {
