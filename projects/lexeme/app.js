@@ -46,6 +46,8 @@ const state = {
 };
 
 const app = document.getElementById("app");
+const ttsAudioCache = new Map();
+let activeAudio = null;
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({
@@ -102,41 +104,32 @@ function languageCodeFromLabel(label, fallback = "en-US") {
   return match ? match[1] : fallback;
 }
 
-function speechSupported() {
-  return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
-}
-
-function voiceForLanguage(languageCode) {
-  const voices = window.speechSynthesis.getVoices?.() || [];
-  const normalized = languageCode.toLowerCase();
-  const languageRoot = normalized.split("-")[0];
-  return (
-    voices.find((voice) => voice.lang.toLowerCase() === normalized) ||
-    voices.find((voice) => voice.lang.toLowerCase().startsWith(`${languageRoot}-`)) ||
-    null
-  );
-}
-
-function speakText(text, languageLabel) {
+async function speakText(text, languageLabel) {
   const value = String(text || "").trim();
   if (!value) return;
 
-  if (!speechSupported()) {
-    setMessage("Pronunciation is not supported in this browser.", true);
-    render();
-    return;
+  const languageCode = languageCodeFromLabel(languageLabel);
+  const cacheKey = `${languageCode}\n${value}`;
+  let source = ttsAudioCache.get(cacheKey);
+
+  if (!source) {
+    const payload = await api("/api/lexeme/tts", {
+      method: "POST",
+      body: {
+        text: value,
+        language_code: languageCode,
+      },
+    });
+    source = `data:${payload.mime_type || "audio/mpeg"};base64,${payload.audio_base64}`;
+    ttsAudioCache.set(cacheKey, source);
   }
 
-  const languageCode = languageCodeFromLabel(languageLabel);
-  const utterance = new SpeechSynthesisUtterance(value);
-  utterance.lang = languageCode;
-  utterance.rate = 0.9;
-
-  const voice = voiceForLanguage(languageCode);
-  if (voice) utterance.voice = voice;
-
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
+  if (activeAudio) {
+    activeAudio.pause();
+    activeAudio.currentTime = 0;
+  }
+  activeAudio = new Audio(source);
+  await activeAudio.play();
 }
 
 function languageForSide(side) {
@@ -648,8 +641,8 @@ async function handleAction(event) {
     if (action === "set-direction") return setDirection(event.currentTarget.dataset.direction);
     if (action === "next-card") return await loadNextCard();
     if (action === "answer-card") return await answerCard(event.currentTarget.dataset.outcome);
-    if (action === "speak-card") return speakCard(event.currentTarget.dataset.cardRole);
-    if (action === "speak-item") return speakItem(event.currentTarget.dataset.itemId, event.currentTarget.dataset.side);
+    if (action === "speak-card") return await speakCard(event.currentTarget.dataset.cardRole);
+    if (action === "speak-item") return await speakItem(event.currentTarget.dataset.itemId, event.currentTarget.dataset.side);
     if (action === "edit-item") return editItem(event.currentTarget.dataset.itemId);
     if (action === "cancel-edit") return cancelEdit();
     if (action === "delete-item") return await deleteItem(event.currentTarget.dataset.itemId);
@@ -659,17 +652,17 @@ async function handleAction(event) {
   }
 }
 
-function speakCard(role) {
+async function speakCard(role) {
   if (!state.currentCard) return;
   const side = cardSideForRole(role);
   const text = role === "answer" ? state.currentCard.answer : state.currentCard.prompt;
-  speakText(text, languageForSide(side));
+  await speakText(text, languageForSide(side));
 }
 
-function speakItem(itemId, side) {
+async function speakItem(itemId, side) {
   const item = state.items.find((row) => row.id === itemId);
   if (!item) return;
-  speakText(side === "target" ? item.target_text : item.source_text, languageForSide(side));
+  await speakText(side === "target" ? item.target_text : item.source_text, languageForSide(side));
 }
 
 async function refresh() {
