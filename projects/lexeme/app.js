@@ -139,6 +139,14 @@ async function loadWorkspace() {
   }
 }
 
+async function loadSelectedStats() {
+  if (!state.selectedListId) {
+    state.stats = null;
+    return;
+  }
+  state.stats = await api(`/api/lexeme/stats?list_id=${state.selectedListId}`);
+}
+
 function render() {
   if (state.loading && !state.user) {
     app.innerHTML = `<div class="auth-page"><div class="auth-card"><div class="brand"><h1>Lexeme</h1><p>Loading...</p></div></div></div>`;
@@ -670,10 +678,30 @@ async function handleEditItem(event) {
 
 async function deleteItem(itemId) {
   if (!confirm("Delete this item? Its past review events will remain in the database.")) return;
-  await api(`/api/lexeme/items/${itemId}`, { method: "DELETE" });
+
+  const previousItems = state.items;
+  const previousLists = state.lists;
+
+  state.items = state.items.filter((item) => item.id !== itemId);
+  state.lists = state.lists.map((list) => (
+    list.id === state.selectedListId
+      ? { ...list, item_count: Math.max(0, list.item_count - 1) }
+      : list
+  ));
+  if (state.currentCard?.item_id === itemId) state.currentCard = null;
   setMessage("Item deleted.");
-  await loadWorkspace();
   render();
+
+  try {
+    await api(`/api/lexeme/items/${itemId}`, { method: "DELETE" });
+    await loadWorkspace();
+    render();
+  } catch (error) {
+    state.items = previousItems;
+    state.lists = previousLists;
+    setMessage(error.message, true);
+    render();
+  }
 }
 
 async function loadNextCard() {
@@ -687,12 +715,15 @@ async function loadNextCard() {
 
 async function answerCard(outcome) {
   if (!state.currentCard) return;
+
+  state.currentCard = { ...state.currentCard, revealed: true, outcome };
+  render();
+
   await api(`/api/lexeme/review-events/${state.currentCard.event_id}/answer`, {
     method: "POST",
     body: { outcome },
   });
-  state.currentCard = { ...state.currentCard, revealed: true, outcome };
-  await loadWorkspace();
+  await loadSelectedStats();
   render();
 }
 
