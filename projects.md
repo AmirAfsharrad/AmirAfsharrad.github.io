@@ -36,8 +36,8 @@ This is where I keep small tools, experiments, and personal projects that are us
 
 <div class="project-list">
   <article class="project-card">
-    <h2><a href="{{ '/projects/language-cards/' | relative_url }}">Language Cards</a></h2>
-    <p>A spaced-review tool for memorizing expressions while learning a language.</p>
-    <div class="project-meta">Placeholder online. Full app coming next.</div>
+    <h2><a href="{{ '/projects/lexeme/' | relative_url }}">Lexeme</a></h2>
+    <p>A private workspace for storing expressions, practicing both directions, and tracking review history.</p>
+    <div class="project-meta">Hidden beta.</div>
   </article>
 </div>
