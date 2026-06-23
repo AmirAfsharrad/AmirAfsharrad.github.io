@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linearization: Tangent Line &amp; Plane &mdash; EE263</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<style>
+  :root { --blue:#1f5fa6; --red:#c0392b; --ink:#222; --muted:#666; --line:#e3e3e3; --bg:#fafafa; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+         color:var(--ink); background:var(--bg); line-height:1.5; }
+  header.page { padding:22px 24px 14px; border-bottom:1px solid var(--line); background:#fff; }
+  header.page .crumb { font-size:.9rem; color:var(--muted); }
+  header.page .crumb a { color:var(--blue); text-decoration:none; }
+  header.page .crumb a:hover { text-decoration:underline; }
+  header.page h1 { margin:6px 0 2px; font-size:1.5rem; }
+  header.page p { margin:0; color:var(--muted); max-width:74ch; }
+
+  .wrap { display:flex; gap:26px; align-items:flex-start; padding:22px 24px 40px; flex-wrap:wrap; }
+  .panel { flex:0 0 320px; max-width:100%; }
+  .stage { flex:1 1 460px; min-width:320px; }
+  #plot { width:100%; height:520px; background:#fff; border:1px solid var(--line); border-radius:4px; }
+
+  .seg { display:flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; margin-bottom:16px; }
+  .seg button { flex:1; font:inherit; padding:8px 0; border:0; background:#fff; cursor:pointer; color:var(--ink); }
+  .seg button.active { background:var(--blue); color:#fff; }
+
+  h3 { font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin:18px 0 8px; }
+  .ctrl { margin-bottom:14px; }
+  .ctrl label { display:flex; justify-content:space-between; font-size:.92rem; margin-bottom:2px; }
+  .ctrl label .val { font-variant-numeric:tabular-nums; color:var(--muted); }
+  .ctrl input[type=range] { width:100%; }
+  select { font:inherit; width:100%; padding:6px 8px; border:1px solid var(--line); border-radius:4px; background:#fff; }
+
+  .eqn { background:#fff; border:1px solid var(--line); border-radius:4px; padding:10px 12px; font-size:.9rem; margin-top:6px; }
+  .eqn code { font-size:.92rem; color:var(--ink); }
+  .eqn .muted { color:var(--muted); }
+</style>
+</head>
+<body>
+<header class="page">
+  <div class="crumb"><a href="../">&larr; Math simulations</a> &nbsp;&middot;&nbsp; EE263, Stanford</div>
+  <h1>Linearization: the tangent line and tangent plane</h1>
+  <p>A smooth function looks linear up close. Pick a point and see the best linear approximation:
+     <i>f</i>(x) &asymp; <i>f</i>(x<sub>0</sub>) + <i>Df</i>(x<sub>0</sub>)(x &minus; x<sub>0</sub>).
+     Drag the base point and watch where the approximation is good and where it breaks down.</p>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="seg">
+      <button id="m2" class="active">1D &mdash; tangent line</button>
+      <button id="m3">2D &mdash; tangent plane</button>
+    </div>
+
+    <h3>Function</h3>
+    <div class="ctrl"><select id="func"></select></div>
+
+    <div id="ctrl2d">
+      <h3>Base point</h3>
+      <div class="ctrl">
+        <label><span>x<sub>0</sub></span><span class="val" id="vx0">1.00</span></label>
+        <input type="range" id="x0" min="-3" max="3" step="0.02" value="1">
+      </div>
+    </div>
+
+    <div id="ctrl3d" style="display:none">
+      <h3>Base point</h3>
+      <div class="ctrl">
+        <label><span>x<sub>0</sub></span><span class="val" id="vx03">0.60</span></label>
+        <input type="range" id="x03" min="-2.5" max="2.5" step="0.02" value="0.6">
+      </div>
+      <div class="ctrl">
+        <label><span>y<sub>0</sub></span><span class="val" id="vy03">-0.40</span></label>
+        <input type="range" id="y03" min="-2.5" max="2.5" step="0.02" value="-0.4">
+      </div>
+    </div>
+
+    <div class="eqn" id="eqn"></div>
+  </div>
+
+  <div class="stage"><div id="plot"></div></div>
+</div>
+
+<script>
+"use strict";
+(function () {
+  const h = 1e-4;
+
+  // ---- function libraries ------------------------------------------------
+  const F2 = {
+    "sin x":            { f: x => Math.sin(x), tex: "sin&thinsp;x" },
+    "x³⁄3 − x":         { f: x => x*x*x/3 - x, tex: "x&sup3;/3 &minus; x" },
+    "e^(0.7x)":         { f: x => Math.exp(0.7*x), tex: "e^(0.7x)" },
+    "bump e^(−x²)":     { f: x => Math.exp(-x*x), tex: "e^(&minus;x&sup2;)" },
+  };
+  const F3 = {
+    "sin x · cos y":    { f: (x,y) => Math.sin(x)*Math.cos(y) },
+    "saddle x² − y²":   { f: (x,y) => 0.5*(x*x - y*y) },
+    "bump e^(−(x²+y²))":{ f: (x,y) => Math.exp(-(x*x+y*y)/2) },
+    "x · y":            { f: (x,y) => x*y },
+  };
+
+  let mode = "2d";
+  let key2 = Object.keys(F2)[0];
+  let key3 = Object.keys(F3)[0];
+
+  const $ = id => document.getElementById(id);
+  const lin = (a,b,n) => Array.from({length:n}, (_,i) => a + (b-a)*i/(n-1));
+
+  // ---- 2D ----------------------------------------------------------------
+  function draw2d() {
+    const F = F2[key2].f;
+    const x0 = parseFloat($("x0").value);
+    const xs = lin(-3.2, 3.2, 240);
+    const ys = xs.map(F);
+    const f0 = F(x0), df = (F(x0+h) - F(x0-h)) / (2*h);
+    const tan = xs.map(x => f0 + df*(x - x0));
+
+    const curve = { x: xs, y: ys, mode:"lines", name:"f(x)",
+                    line:{color:"#1f5fa6", width:3} };
+    const tangent = { x: xs, y: tan, mode:"lines", name:"linear approx.",
+                      line:{color:"#c0392b", width:2.5, dash:"dash"} };
+    // shaded error between curve and tangent
+    const errBand = { x: xs.concat(xs.slice().reverse()),
+                      y: ys.concat(tan.slice().reverse()),
+                      fill:"toself", fillcolor:"rgba(192,57,43,0.10)",
+                      line:{width:0}, hoverinfo:"skip", showlegend:false };
+    const pt = { x:[x0], y:[f0], mode:"markers+text", text:["x₀"], textposition:"top center",
+                 marker:{color:"#111", size:9}, showlegend:false };
+
+    const layout = {
+      margin:{l:45,r:15,t:10,b:40}, paper_bgcolor:"#fff", plot_bgcolor:"#fff",
+      xaxis:{title:"x", range:[-3.2,3.2], zeroline:true, zerolinecolor:"#bbb"},
+      yaxis:{title:"f", range:yRange(ys), zeroline:true, zerolinecolor:"#bbb"},
+      legend:{x:0.02,y:0.98,bgcolor:"rgba(255,255,255,0.6)"},
+      font:{family:"Georgia, serif"},
+    };
+    Plotly.react("plot", [errBand, curve, tangent, pt], layout, {displayModeBar:false, responsive:true});
+    $("vx0").textContent = x0.toFixed(2);
+    $("eqn").innerHTML = `<code>f(x) &asymp; f(x₀) + f&prime;(x₀)(x &minus; x₀)</code><br>
+      <span class="muted">f(x₀) = ${f0.toFixed(3)}, &nbsp; f&prime;(x₀) = ${df.toFixed(3)}.
+      Shaded area is the approximation error; it grows as you move away from x₀.</span>`;
+  }
+  function yRange(ys) {
+    let lo = Math.min(...ys), hi = Math.max(...ys), pad = 0.2*(hi-lo+1e-6);
+    return [lo-pad, hi+pad];
+  }
+
+  // ---- 3D ----------------------------------------------------------------
+  function draw3d() {
+    const F = F3[key3].f;
+    const x0 = parseFloat($("x03").value), y0 = parseFloat($("y03").value);
+    const n = 40, lo = -2.6, hi = 2.6;
+    const gx = lin(lo, hi, n), gy = lin(lo, hi, n);
+    const Z = gy.map(y => gx.map(x => F(x,y)));            // Z[row=y][col=x]
+
+    const f0 = F(x0,y0);
+    const fx = (F(x0+h,y0) - F(x0-h,y0)) / (2*h);
+    const fy = (F(x0,y0+h) - F(x0,y0-h)) / (2*h);
+
+    // tangent plane patch around (x0,y0)
+    const s = 1.3, m = 12;
+    const px = lin(x0-s, x0+s, m), py = lin(y0-s, y0+s, m);
+    const P = py.map(y => px.map(x => f0 + fx*(x-x0) + fy*(y-y0)));
+
+    const surf = { type:"surface", x:gx, y:gy, z:Z, showscale:false,
+                   colorscale:"Blues", opacity:0.95, name:"f", hoverinfo:"skip" };
+    const plane = { type:"surface", x:px, y:py, z:P, showscale:false,
+                    colorscale:[[0,"#c0392b"],[1,"#c0392b"]], opacity:0.55,
+                    name:"tangent plane", hoverinfo:"skip" };
+    const pt = { type:"scatter3d", x:[x0], y:[y0], z:[f0], mode:"markers",
+                 marker:{color:"#111", size:4}, name:"(x₀,y₀)", hoverinfo:"skip" };
+
+    let flat = Z.flat(), zlo = Math.min(...flat), zhi = Math.max(...flat), zp = 0.2*(zhi-zlo+1e-6);
+    const layout = {
+      margin:{l:0,r:0,t:0,b:0}, paper_bgcolor:"#fff",
+      scene:{
+        xaxis:{title:"x", range:[lo,hi]}, yaxis:{title:"y", range:[lo,hi]},
+        zaxis:{title:"f", range:[zlo-zp, zhi+zp]},
+        camera:{eye:{x:1.5,y:1.5,z:1.0}}, aspectmode:"cube",
+      },
+      showlegend:false, font:{family:"Georgia, serif"},
+    };
+    Plotly.react("plot", [surf, plane, pt], layout, {displayModeBar:false, responsive:true});
+    $("vx03").textContent = x0.toFixed(2);
+    $("vy03").textContent = y0.toFixed(2);
+    $("eqn").innerHTML = `<code>f(x,y) &asymp; f₀ + f<sub>x</sub>(x&minus;x₀) + f<sub>y</sub>(y&minus;y₀)</code><br>
+      <span class="muted">f₀ = ${f0.toFixed(3)}, &nbsp; f<sub>x</sub> = ${fx.toFixed(3)}, &nbsp; f<sub>y</sub> = ${fy.toFixed(3)}.
+      The red plane is the gradient&rsquo;s best flat fit at (x₀,y₀); drag to rotate.</span>`;
+  }
+
+  function draw() { mode === "2d" ? draw2d() : draw3d(); }
+
+  // ---- function dropdown -------------------------------------------------
+  function fillFuncMenu() {
+    const sel = $("func"); sel.innerHTML = "";
+    const keys = mode === "2d" ? Object.keys(F2) : Object.keys(F3);
+    const cur = mode === "2d" ? key2 : key3;
+    keys.forEach(k => {
+      const o = document.createElement("option"); o.value = k; o.textContent = k;
+      if (k === cur) o.selected = true; sel.appendChild(o);
+    });
+  }
+  $("func").addEventListener("change", e => {
+    if (mode === "2d") key2 = e.target.value; else key3 = e.target.value;
+    draw();
+  });
+
+  // ---- mode switch -------------------------------------------------------
+  function setMode(m) {
+    mode = m;
+    $("m2").classList.toggle("active", m === "2d");
+    $("m3").classList.toggle("active", m === "3d");
+    $("ctrl2d").style.display = m === "2d" ? "" : "none";
+    $("ctrl3d").style.display = m === "3d" ? "" : "none";
+    fillFuncMenu(); draw();
+  }
+  $("m2").addEventListener("click", () => setMode("2d"));
+  $("m3").addEventListener("click", () => setMode("3d"));
+
+  ["x0","x03","y03"].forEach(id => $(id).addEventListener("input", draw));
+
+  fillFuncMenu();
+  draw();
+})();
+</script>
+</body>
+</html>

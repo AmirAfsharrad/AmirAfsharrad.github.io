@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2&times;2 Matrix as a Linear Transformation &mdash; EE263</title>
+<style>
+  :root {
+    --blue: #1f5fa6;
+    --red: #c0392b;
+    --green: #2e8b57;
+    --orange: #e08214;
+    --ink: #222;
+    --muted: #666;
+    --line: #e3e3e3;
+    --bg: #fafafa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.5;
+  }
+  header.page {
+    padding: 22px 24px 14px;
+    border-bottom: 1px solid var(--line);
+    background: #fff;
+  }
+  header.page .crumb { font-size: .9rem; color: var(--muted); }
+  header.page .crumb a { color: var(--blue); text-decoration: none; }
+  header.page .crumb a:hover { text-decoration: underline; }
+  header.page h1 { margin: 6px 0 2px; font-size: 1.5rem; }
+  header.page p { margin: 0; color: var(--muted); max-width: 70ch; }
+
+  .wrap {
+    display: flex;
+    gap: 26px;
+    align-items: flex-start;
+    padding: 22px 24px 40px;
+    flex-wrap: wrap;
+  }
+  .panel {
+    flex: 0 0 330px;
+    max-width: 100%;
+  }
+  .stage {
+    flex: 1 1 420px;
+    min-width: 320px;
+    max-width: 560px;
+  }
+  canvas {
+    width: 100%;
+    height: auto;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    touch-action: none;
+  }
+
+  .matrix-box { display: flex; align-items: center; gap: 12px; margin: 4px 0 14px; }
+  .bracket {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 12px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--ink);
+    border-right: 3px solid var(--ink);
+    border-radius: 2px;
+  }
+  .bracket span {
+    font-variant-numeric: tabular-nums;
+    font-size: 1.15rem;
+    text-align: center;
+    min-width: 3.2ch;
+  }
+  .bracket span:nth-child(1) { color: var(--red); }    /* a -> col 1 */
+  .bracket span:nth-child(3) { color: var(--red); }    /* c -> col 1 */
+  .bracket span:nth-child(2) { color: var(--green); }  /* b -> col 2 */
+  .bracket span:nth-child(4) { color: var(--green); }  /* d -> col 2 */
+  .label-A { font-size: 1.2rem; font-style: italic; }
+
+  .ctrl { margin-bottom: 12px; }
+  .ctrl label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: .92rem; margin-bottom: 2px;
+  }
+  .ctrl label b { font-style: italic; }
+  .ctrl label .val { font-variant-numeric: tabular-nums; color: var(--muted); }
+  .ctrl input[type=range] { width: 100%; }
+  .ctrl.c1 label b { color: var(--red); }
+  .ctrl.c2 label b { color: var(--green); }
+
+  .readout {
+    background: #fff; border: 1px solid var(--line); border-radius: 4px;
+    padding: 10px 12px; font-size: .92rem; margin: 4px 0 14px;
+  }
+  .readout .row { display: flex; justify-content: space-between; }
+  .readout .row + .row { margin-top: 4px; }
+  .readout b { font-variant-numeric: tabular-nums; }
+  .readout .hint { color: var(--muted); font-size: .85rem; margin-top: 6px; }
+
+  .presets { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .presets button, .reset button {
+    font: inherit; font-size: .85rem; padding: 5px 10px;
+    border: 1px solid var(--line); background: #fff; border-radius: 4px;
+    cursor: pointer; color: var(--ink);
+  }
+  .presets button:hover, .reset button:hover { border-color: var(--blue); color: var(--blue); }
+
+  .toggles { font-size: .9rem; }
+  .toggles label { display: block; margin-bottom: 5px; cursor: pointer; }
+  .toggles input { margin-right: 7px; }
+
+  .legend { font-size: .85rem; color: var(--muted); margin-top: 10px; }
+  .legend .sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+
+  h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 18px 0 8px; }
+  .actions { margin: 10px 0 0; display: flex; gap: 8px; }
+  .actions button {
+    font: inherit; font-size: .9rem; padding: 6px 14px; border-radius: 4px; cursor: pointer;
+    border: 1px solid var(--blue); background: var(--blue); color: #fff;
+  }
+  .actions button.ghost { background: #fff; color: var(--blue); }
+</style>
+</head>
+<body>
+<header class="page">
+  <div class="crumb"><a href="../">&larr; Math simulations</a> &nbsp;&middot;&nbsp; EE263, Stanford</div>
+  <h1>A 2&times;2 matrix is a transformation of the plane</h1>
+  <p>A matrix <i>A</i> sends every point <i>x</i> to <i>Ax</i>. Change the four entries and watch
+     the grid deform. The red and green arrows are the images of the basis vectors
+     <i>e</i><sub>1</sub>, <i>e</i><sub>2</sub>: they are exactly the two columns of <i>A</i>.
+     Drag the gray vector to move <i>x</i> and see its image <i>Ax</i>.</p>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="matrix-box">
+      <span class="label-A">A =</span>
+      <div class="bracket">
+        <span id="da">1</span><span id="db">0</span>
+        <span id="dc">0</span><span id="dd">1</span>
+      </div>
+    </div>
+
+    <div class="ctrl c1">
+      <label><b>a</b> <span class="val" id="va">1.00</span></label>
+      <input type="range" id="sa" min="-3" max="3" step="0.05" value="1">
+    </div>
+    <div class="ctrl c2">
+      <label><b>b</b> <span class="val" id="vb">0.00</span></label>
+      <input type="range" id="sb" min="-3" max="3" step="0.05" value="0">
+    </div>
+    <div class="ctrl c1">
+      <label><b>c</b> <span class="val" id="vc">0.00</span></label>
+      <input type="range" id="sc" min="-3" max="3" step="0.05" value="0">
+    </div>
+    <div class="ctrl c2">
+      <label><b>d</b> <span class="val" id="vd">1.00</span></label>
+      <input type="range" id="sd" min="-3" max="3" step="0.05" value="1">
+    </div>
+
+    <div class="readout">
+      <div class="row"><span>det A (area scale)</span><b id="rdet">+1.00</b></div>
+      <div class="row"><span>orientation</span><b id="rorient">preserved</b></div>
+      <div class="hint" id="rhint">Invertible: every <i>y</i> has a unique <i>x</i> with <i>Ax = y</i>.</div>
+    </div>
+
+    <h3>Presets</h3>
+    <div class="presets" id="presets"></div>
+
+    <h3>Show</h3>
+    <div class="toggles">
+      <label><input type="checkbox" id="tgGrid" checked> transformed grid</label>
+      <label><input type="checkbox" id="tgOrig"> original grid (faint)</label>
+      <label><input type="checkbox" id="tgSquare" checked> image of unit square</label>
+      <label><input type="checkbox" id="tgVec" checked> input vector x and Ax</label>
+    </div>
+
+    <div class="actions">
+      <button id="btnAnim">Animate from I</button>
+      <button class="ghost" id="btnReset">Reset</button>
+    </div>
+
+    <div class="legend">
+      <div><span class="sw" style="background:#c0392b"></span> Ae<sub>1</sub> = 1st column of A
+           &nbsp; <span class="sw" style="background:#2e8b57"></span> Ae<sub>2</sub> = 2nd column</div>
+      <div style="margin-top:4px"><span class="sw" style="background:#9aa3ad"></span> x
+           &nbsp; <span class="sw" style="background:#e08214"></span> Ax</div>
+    </div>
+  </div>
+
+  <div class="stage">
+    <canvas id="cv" width="640" height="640"></canvas>
+  </div>
+</div>
+
+<script>
+"use strict";
+(function () {
+  const cv = document.getElementById("cv");
+  const ctx = cv.getContext("2d");
+
+  // --- world <-> screen ---------------------------------------------------
+  const VIEW = 4.2;                 // world spans [-VIEW, VIEW] in both axes
+  let W = cv.width, H = cv.height;   // device pixels (set in resize)
+  function resize() {
+    const cssW = cv.clientWidth || 640;
+    const dpr = window.devicePixelRatio || 1;
+    W = Math.round(cssW * dpr);
+    H = W;                            // keep square
+    cv.width = W; cv.height = H;
+    cv.style.height = cssW + "px";
+    draw();
+  }
+  function S(x, y) {                  // world -> screen pixels
+    const s = W / (2 * VIEW);
+    return [W / 2 + x * s, H / 2 - y * s];
+  }
+  function Sinv(px, py) {             // screen pixels -> world
+    const s = W / (2 * VIEW);
+    return [(px - W / 2) / s, (H / 2 - py) / s];
+  }
+
+  // --- model --------------------------------------------------------------
+  let A = [1, 0, 0, 1];              // [a, b, c, d]
+  let xVec = [1.6, 1.0];             // draggable input vector
+  const show = { grid: true, orig: false, square: true, vec: true };
+  function apply(M, v) { return [M[0] * v[0] + M[1] * v[1], M[2] * v[0] + M[3] * v[1]]; }
+
+  // --- drawing primitives -------------------------------------------------
+  function line(p, q, color, lw) {
+    ctx.beginPath();
+    const a = S(p[0], p[1]), b = S(q[0], q[1]);
+    ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.stroke();
+  }
+  function arrow(from, to, color, lw) {
+    const a = S(from[0], from[1]), b = S(to[0], to[1]);
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw;
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    const ang = Math.atan2(b[1] - a[1], b[0] - a[0]);
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    const h = Math.min(13 * (window.devicePixelRatio || 1), len * 0.4);
+    ctx.beginPath();
+    ctx.moveTo(b[0], b[1]);
+    ctx.lineTo(b[0] - h * Math.cos(ang - 0.4), b[1] - h * Math.sin(ang - 0.4));
+    ctx.lineTo(b[0] - h * Math.cos(ang + 0.4), b[1] - h * Math.sin(ang + 0.4));
+    ctx.closePath(); ctx.fill();
+  }
+  function gridLines(M, color, lw) {
+    const R = 12;                    // lattice range (large so it fills the view)
+    for (let i = -R; i <= R; i++) {
+      line(apply(M, [i, -R]), apply(M, [i, R]), color, lw);
+      line(apply(M, [-R, i]), apply(M, [R, i]), color, lw);
+    }
+  }
+
+  function draw() {
+    const dpr = window.devicePixelRatio || 1;
+    ctx.clearRect(0, 0, W, H);
+
+    if (show.orig) gridLines([1, 0, 0, 1], "#eef0f2", 1 * dpr);
+    if (show.grid) gridLines(A, "#d3d7dc", 1.2 * dpr);
+
+    // axes
+    line([-VIEW, 0], [VIEW, 0], "#9aa3ad", 1.2 * dpr);
+    line([0, -VIEW], [0, VIEW], "#9aa3ad", 1.2 * dpr);
+
+    // image of unit square
+    if (show.square) {
+      const corners = [[0, 0], [1, 0], [1, 1], [0, 1]].map(p => apply(A, p));
+      ctx.beginPath();
+      corners.forEach((p, k) => { const s = S(p[0], p[1]); k ? ctx.lineTo(s[0], s[1]) : ctx.moveTo(s[0], s[1]); });
+      ctx.closePath();
+      ctx.fillStyle = "rgba(31,95,166,0.13)";
+      ctx.strokeStyle = "rgba(31,95,166,0.55)";
+      ctx.lineWidth = 1.4 * dpr; ctx.fill(); ctx.stroke();
+    }
+
+    // input vector x and its image Ax
+    if (show.vec) {
+      arrow([0, 0], xVec, "#9aa3ad", 2.4 * dpr);
+      arrow([0, 0], apply(A, xVec), "#e08214", 2.8 * dpr);
+    }
+
+    // basis vector images = columns of A
+    arrow([0, 0], [A[0], A[2]], "#c0392b", 3 * dpr);   // A e1 = (a, c)
+    arrow([0, 0], [A[1], A[3]], "#2e8b57", 3 * dpr);   // A e2 = (b, d)
+  }
+
+  // --- UI sync ------------------------------------------------------------
+  const ids = ["a", "b", "c", "d"];
+  function refreshMatrixUI() {
+    ids.forEach((k, i) => {
+      document.getElementById("s" + k).value = A[i];
+      document.getElementById("v" + k).textContent = A[i].toFixed(2);
+      document.getElementById("d" + k).textContent = (Math.round(A[i] * 100) / 100).toString();
+    });
+    const det = A[0] * A[3] - A[1] * A[2];
+    document.getElementById("rdet").textContent = (det >= 0 ? "+" : "") + det.toFixed(2);
+    document.getElementById("rorient").textContent =
+      Math.abs(det) < 1e-9 ? "collapsed" : (det > 0 ? "preserved" : "flipped");
+    const hint = document.getElementById("rhint");
+    if (Math.abs(det) < 1e-9)
+      hint.innerHTML = "Singular: the plane collapses onto a line. Some <i>y</i> are unreachable; solutions are not unique.";
+    else
+      hint.innerHTML = "Invertible: every <i>y</i> has a unique <i>x</i> with <i>Ax = y</i>.";
+  }
+  function setA(M, animate) {
+    if (animate) { animateTo(M); return; }
+    A = M.slice(); refreshMatrixUI(); draw();
+  }
+
+  ids.forEach((k, i) => {
+    document.getElementById("s" + k).addEventListener("input", e => {
+      A[i] = parseFloat(e.target.value);
+      refreshMatrixUI(); draw();
+    });
+  });
+
+  // toggles
+  const tg = { grid: "tgGrid", orig: "tgOrig", square: "tgSquare", vec: "tgVec" };
+  Object.entries(tg).forEach(([key, id]) => {
+    document.getElementById(id).addEventListener("change", e => { show[key] = e.target.checked; draw(); });
+  });
+
+  // presets
+  const r = (deg) => { const t = deg * Math.PI / 180; return [Math.cos(t), -Math.sin(t), Math.sin(t), Math.cos(t)]; };
+  const PRESETS = [
+    ["Identity", [1, 0, 0, 1]],
+    ["Rotate 30°", r(30)],
+    ["Shear", [1, 1, 0, 1]],
+    ["Scale", [1.8, 0, 0, 0.5]],
+    ["Reflect (y=x)", [0, 1, 1, 0]],
+    ["Project to x", [1, 0, 0, 0]],
+    ["Rotate+Scale", [1.2, -0.7, 0.7, 1.2]],
+    ["Random", null],
+  ];
+  const pbox = document.getElementById("presets");
+  PRESETS.forEach(([name, M]) => {
+    const b = document.createElement("button");
+    b.textContent = name;
+    b.addEventListener("click", () => {
+      const target = M ? M : [rand(), rand(), rand(), rand()];
+      setA(target, true);
+    });
+    pbox.appendChild(b);
+  });
+  function rand() { return Math.round((Math.random() * 4 - 2) * 20) / 20; }
+
+  // animation: morph from current A (or I) to target
+  let animId = null;
+  function animateTo(target) {
+    if (animId) cancelAnimationFrame(animId);
+    const start = [1, 0, 0, 1];               // always morph from the identity for clarity
+    const dur = 750, t0 = performance.now();
+    function step(now) {
+      let u = Math.min(1, (now - t0) / dur);
+      const e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;  // ease in-out
+      A = start.map((s, i) => s + (target[i] - s) * e);
+      refreshMatrixUI(); draw();
+      if (u < 1) animId = requestAnimationFrame(step); else animId = null;
+    }
+    animId = requestAnimationFrame(step);
+  }
+  document.getElementById("btnAnim").addEventListener("click", () => animateTo(A.slice()));
+  document.getElementById("btnReset").addEventListener("click", () => { xVec = [1.6, 1.0]; setA([1, 0, 0, 1], false); });
+
+  // dragging the input vector x
+  let dragging = false;
+  function pointerWorld(ev) {
+    const rect = cv.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    return Sinv((ev.clientX - rect.left) * dpr, (ev.clientY - rect.top) * dpr);
+  }
+  cv.addEventListener("pointerdown", ev => {
+    if (!show.vec) return;
+    const w = pointerWorld(ev);
+    if (Math.hypot(w[0] - xVec[0], w[1] - xVec[1]) < 0.6) { dragging = true; cv.setPointerCapture(ev.pointerId); }
+  });
+  cv.addEventListener("pointermove", ev => {
+    if (!dragging) return;
+    xVec = pointerWorld(ev);
+    xVec = [Math.round(xVec[0] * 20) / 20, Math.round(xVec[1] * 20) / 20];
+    draw();
+  });
+  cv.addEventListener("pointerup", () => { dragging = false; });
+
+  window.addEventListener("resize", resize);
+  refreshMatrixUI();
+  resize();
+})();
+</script>
+</body>
+</html>

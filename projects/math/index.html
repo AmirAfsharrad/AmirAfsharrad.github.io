@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Math Simulations &mdash; EE263</title>
+<style>
+  :root { --blue:#1f5fa6; --ink:#222; --muted:#666; --line:#e5e5e5; --bg:#fafafa; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+         color:var(--ink); background:var(--bg); line-height:1.55; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 24px 60px; }
+  .crumb { font-size:.9rem; color:var(--muted); }
+  .crumb a { color:var(--blue); text-decoration:none; }
+  .crumb a:hover { text-decoration:underline; }
+  h1 { margin: 10px 0 4px; font-size: 1.9rem; }
+  .lede { color: var(--muted); margin: 0 0 28px; max-width: 64ch; }
+
+  .grid { display: grid; gap: 16px; }
+  @media (min-width: 620px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+  .card {
+    display: flex; flex-direction: column;
+    border: 1px solid var(--line); background: #fff; border-radius: 8px;
+    padding: 0; overflow: hidden; text-decoration: none; color: inherit;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+  }
+  .card:hover { border-color: var(--blue); box-shadow: 0 4px 16px rgba(0,0,0,.06); transform: translateY(-2px); }
+  .thumb { height: 120px; background: #fff; border-bottom: 1px solid var(--line); }
+  .thumb svg { width: 100%; height: 100%; display: block; }
+  .body { padding: 16px 18px 18px; }
+  .body h2 { margin: 0 0 6px; font-size: 1.12rem; }
+  .body p { margin: 0 0 10px; color: var(--muted); font-size: .95rem; }
+  .tag { font-size:.78rem; color:var(--blue); font-weight:600; }
+
+  footer { color: var(--muted); font-size: .85rem; margin-top: 34px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="crumb"><a href="../">&larr; Projects</a></div>
+  <h1>Math simulations</h1>
+  <p class="lede">Small interactive visualizations for the linear-algebra ideas behind EE263.
+     Open one and change the parameters to build intuition.</p>
+
+  <div class="grid">
+
+    <a class="card" href="./matrix-2x2/">
+      <div class="thumb">
+        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g stroke="#d3d7dc" stroke-width="1">
+            <path d="M20 100 L60 60 M50 100 L90 60 M80 100 L120 60 M110 100 L150 60 M140 100 L180 60"/>
+            <path d="M40 100 L20 80 M70 100 L30 60 M100 100 L50 50 M130 100 L80 50 M160 100 L120 60"/>
+          </g>
+          <line x1="100" y1="100" x2="148" y2="78" stroke="#c0392b" stroke-width="3"/>
+          <line x1="100" y1="100" x2="118" y2="52" stroke="#2e8b57" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="tag">Linear maps</div>
+        <h2>2&times;2 matrix as a transformation</h2>
+        <p>Change the four entries and watch the grid stretch, rotate, shear, and collapse. The columns of <i>A</i> are the basis-vector images.</p>
+      </div>
+    </a>
+
+    <a class="card" href="./linearization/">
+      <div class="thumb">
+        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M10 95 Q70 5 110 60 T190 40" fill="none" stroke="#1f5fa6" stroke-width="3"/>
+          <line x1="40" y1="92" x2="150" y2="20" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6 4"/>
+          <circle cx="92" cy="53" r="4" fill="#111"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="tag">Calculus &rarr; linear algebra</div>
+        <h2>Linearization: tangent line &amp; plane</h2>
+        <p>See the best linear approximation of a nonlinear function in 1D and 2D, and where it stops being accurate.</p>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>More simulations will be added as the course goes on.</footer>
+</div>
+</body>
+</html>
