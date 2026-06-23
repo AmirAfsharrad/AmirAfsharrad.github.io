@@ -41,15 +41,8 @@
     padding: 22px 24px 40px;
     flex-wrap: wrap;
   }
-  .panel {
-    flex: 0 0 330px;
-    max-width: 100%;
-  }
-  .stage {
-    flex: 1 1 420px;
-    min-width: 320px;
-    max-width: 560px;
-  }
+  .panel { flex: 0 0 330px; max-width: 100%; }
+  .stage { flex: 1 1 420px; min-width: 320px; max-width: 560px; }
   canvas {
     width: 100%;
     height: auto;
@@ -59,27 +52,37 @@
     touch-action: none;
   }
 
-  .matrix-box { display: flex; align-items: center; gap: 12px; margin: 4px 0 14px; }
+  .obj-box { display: flex; align-items: center; gap: 12px; margin: 4px 0 6px; }
+  .label-A { font-size: 1.2rem; font-style: italic; }
   .bracket {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 6px 12px;
-    padding: 10px 14px;
+    gap: 6px 10px;
+    padding: 8px 12px;
     border-left: 3px solid var(--ink);
     border-right: 3px solid var(--ink);
     border-radius: 2px;
   }
-  .bracket span {
+  .bracket.col { grid-template-columns: 1fr; }
+  .bracket input {
+    font: inherit;
     font-variant-numeric: tabular-nums;
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     text-align: center;
-    min-width: 3.2ch;
+    width: 4.4ch;
+    padding: 3px 2px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: #fff;
+    -moz-appearance: textfield;
   }
-  .bracket span:nth-child(1) { color: var(--red); }    /* a -> col 1 */
-  .bracket span:nth-child(3) { color: var(--red); }    /* c -> col 1 */
-  .bracket span:nth-child(2) { color: var(--green); }  /* b -> col 2 */
-  .bracket span:nth-child(4) { color: var(--green); }  /* d -> col 2 */
-  .label-A { font-size: 1.2rem; font-style: italic; }
+  .bracket input::-webkit-outer-spin-button,
+  .bracket input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .bracket input:focus { outline: 2px solid var(--blue); outline-offset: 0; border-color: var(--blue); }
+  .mbracket input:nth-child(odd)  { color: var(--red); }    /* a, c -> column 1 */
+  .mbracket input:nth-child(even) { color: var(--green); }  /* b, d -> column 2 */
+  .vbracket input { color: #6b7280; }
+  .typehint { font-size: .8rem; color: var(--muted); margin: 0 0 14px; }
 
   .ctrl { margin-bottom: 12px; }
   .ctrl label {
@@ -102,12 +105,12 @@
   .readout .hint { color: var(--muted); font-size: .85rem; margin-top: 6px; }
 
   .presets { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-  .presets button, .reset button {
+  .presets button {
     font: inherit; font-size: .85rem; padding: 5px 10px;
     border: 1px solid var(--line); background: #fff; border-radius: 4px;
     cursor: pointer; color: var(--ink);
   }
-  .presets button:hover, .reset button:hover { border-color: var(--blue); color: var(--blue); }
+  .presets button:hover { border-color: var(--blue); color: var(--blue); }
 
   .toggles { font-size: .9rem; }
   .toggles label { display: block; margin-bottom: 5px; cursor: pointer; }
@@ -129,21 +132,26 @@
 <header class="page">
   <div class="crumb"><a href="../">&larr; Math simulations</a> &nbsp;&middot;&nbsp; EE263, Stanford</div>
   <h1>A 2&times;2 matrix is a transformation of the plane</h1>
-  <p>A matrix <i>A</i> sends every point <i>x</i> to <i>Ax</i>. Change the four entries and watch
-     the grid deform. The red and green arrows are the images of the basis vectors
-     <i>e</i><sub>1</sub>, <i>e</i><sub>2</sub>: they are exactly the two columns of <i>A</i>.
-     Drag the gray vector to move <i>x</i> and see its image <i>Ax</i>.</p>
+  <p>A matrix <i>A</i> sends every point <i>x</i> to <i>Ax</i>. Set the four entries (type them,
+     drag the sliders, or pick a preset) and watch the grid deform. The red and green arrows are
+     the images of the basis vectors <i>e</i><sub>1</sub>, <i>e</i><sub>2</sub>: they are exactly
+     the two columns of <i>A</i>. Set <i>x</i> by typing or by dragging the gray vector, and see
+     its image <i>Ax</i>.</p>
 </header>
 
 <div class="wrap">
   <div class="panel">
-    <div class="matrix-box">
+    <h3>Matrix A</h3>
+    <div class="obj-box">
       <span class="label-A">A =</span>
-      <div class="bracket">
-        <span id="da">1</span><span id="db">0</span>
-        <span id="dc">0</span><span id="dd">1</span>
+      <div class="bracket mbracket">
+        <input type="number" step="0.05" id="ma" value="1" aria-label="a">
+        <input type="number" step="0.05" id="mb" value="0" aria-label="b">
+        <input type="number" step="0.05" id="mc" value="0" aria-label="c">
+        <input type="number" step="0.05" id="md" value="1" aria-label="d">
       </div>
     </div>
+    <p class="typehint">Type any numbers, or use the sliders below.</p>
 
     <div class="ctrl c1">
       <label><b>a</b> <span class="val" id="va">1.00</span></label>
@@ -161,6 +169,16 @@
       <label><b>d</b> <span class="val" id="vd">1.00</span></label>
       <input type="range" id="sd" min="-3" max="3" step="0.05" value="1">
     </div>
+
+    <h3>Input vector x</h3>
+    <div class="obj-box">
+      <span class="label-A">x =</span>
+      <div class="bracket vbracket col">
+        <input type="number" step="0.1" id="vx1" value="1.6" aria-label="x1">
+        <input type="number" step="0.1" id="vx2" value="1" aria-label="x2">
+      </div>
+    </div>
+    <p class="typehint">Type the components, or drag the gray arrow on the plot.</p>
 
     <div class="readout">
       <div class="row"><span>det A (area scale)</span><b id="rdet">+1.00</b></div>
@@ -202,35 +220,30 @@
 (function () {
   const cv = document.getElementById("cv");
   const ctx = cv.getContext("2d");
+  const $ = id => document.getElementById(id);
 
   // --- world <-> screen ---------------------------------------------------
-  const VIEW = 4.2;                 // world spans [-VIEW, VIEW] in both axes
-  let W = cv.width, H = cv.height;   // device pixels (set in resize)
+  const VIEW = 4.2;                  // world spans [-VIEW, VIEW] in both axes
+  let W = cv.width, H = cv.height;   // device pixels
   function resize() {
     const cssW = cv.clientWidth || 640;
     const dpr = window.devicePixelRatio || 1;
-    W = Math.round(cssW * dpr);
-    H = W;                            // keep square
+    W = Math.round(cssW * dpr); H = W;
     cv.width = W; cv.height = H;
     cv.style.height = cssW + "px";
     draw();
   }
-  function S(x, y) {                  // world -> screen pixels
-    const s = W / (2 * VIEW);
-    return [W / 2 + x * s, H / 2 - y * s];
-  }
-  function Sinv(px, py) {             // screen pixels -> world
-    const s = W / (2 * VIEW);
-    return [(px - W / 2) / s, (H / 2 - py) / s];
-  }
+  function S(x, y) { const s = W / (2 * VIEW); return [W / 2 + x * s, H / 2 - y * s]; }
+  function Sinv(px, py) { const s = W / (2 * VIEW); return [(px - W / 2) / s, (H / 2 - py) / s]; }
 
   // --- model --------------------------------------------------------------
   let A = [1, 0, 0, 1];              // [a, b, c, d]
-  let xVec = [1.6, 1.0];             // draggable input vector
+  let xVec = [1.6, 1.0];
   const show = { grid: true, orig: false, square: true, vec: true };
-  function apply(M, v) { return [M[0] * v[0] + M[1] * v[1], M[2] * v[0] + M[3] * v[1]]; }
+  const apply = (M, v) => [M[0] * v[0] + M[1] * v[1], M[2] * v[0] + M[3] * v[1]];
+  const r2 = x => Math.round(x * 100) / 100;
 
-  // --- drawing primitives -------------------------------------------------
+  // --- drawing ------------------------------------------------------------
   function line(p, q, color, lw) {
     ctx.beginPath();
     const a = S(p[0], p[1]), b = S(q[0], q[1]);
@@ -244,6 +257,7 @@
     const ang = Math.atan2(b[1] - a[1], b[0] - a[0]);
     const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
     const h = Math.min(13 * (window.devicePixelRatio || 1), len * 0.4);
+    if (len < 1) return;
     ctx.beginPath();
     ctx.moveTo(b[0], b[1]);
     ctx.lineTo(b[0] - h * Math.cos(ang - 0.4), b[1] - h * Math.sin(ang - 0.4));
@@ -251,25 +265,19 @@
     ctx.closePath(); ctx.fill();
   }
   function gridLines(M, color, lw) {
-    const R = 12;                    // lattice range (large so it fills the view)
+    const R = 12;
     for (let i = -R; i <= R; i++) {
       line(apply(M, [i, -R]), apply(M, [i, R]), color, lw);
       line(apply(M, [-R, i]), apply(M, [R, i]), color, lw);
     }
   }
-
   function draw() {
     const dpr = window.devicePixelRatio || 1;
     ctx.clearRect(0, 0, W, H);
-
     if (show.orig) gridLines([1, 0, 0, 1], "#eef0f2", 1 * dpr);
     if (show.grid) gridLines(A, "#d3d7dc", 1.2 * dpr);
-
-    // axes
     line([-VIEW, 0], [VIEW, 0], "#9aa3ad", 1.2 * dpr);
     line([0, -VIEW], [0, VIEW], "#9aa3ad", 1.2 * dpr);
-
-    // image of unit square
     if (show.square) {
       const corners = [[0, 0], [1, 0], [1, 1], [0, 1]].map(p => apply(A, p));
       ctx.beginPath();
@@ -279,59 +287,66 @@
       ctx.strokeStyle = "rgba(31,95,166,0.55)";
       ctx.lineWidth = 1.4 * dpr; ctx.fill(); ctx.stroke();
     }
-
-    // input vector x and its image Ax
     if (show.vec) {
       arrow([0, 0], xVec, "#9aa3ad", 2.4 * dpr);
       arrow([0, 0], apply(A, xVec), "#e08214", 2.8 * dpr);
     }
-
-    // basis vector images = columns of A
     arrow([0, 0], [A[0], A[2]], "#c0392b", 3 * dpr);   // A e1 = (a, c)
     arrow([0, 0], [A[1], A[3]], "#2e8b57", 3 * dpr);   // A e2 = (b, d)
   }
 
   // --- UI sync ------------------------------------------------------------
   const ids = ["a", "b", "c", "d"];
-  function refreshMatrixUI() {
-    ids.forEach((k, i) => {
-      document.getElementById("s" + k).value = A[i];
-      document.getElementById("v" + k).textContent = A[i].toFixed(2);
-      document.getElementById("d" + k).textContent = (Math.round(A[i] * 100) / 100).toString();
-    });
+  function updateReadout() {
     const det = A[0] * A[3] - A[1] * A[2];
-    document.getElementById("rdet").textContent = (det >= 0 ? "+" : "") + det.toFixed(2);
-    document.getElementById("rorient").textContent =
-      Math.abs(det) < 1e-9 ? "collapsed" : (det > 0 ? "preserved" : "flipped");
-    const hint = document.getElementById("rhint");
-    if (Math.abs(det) < 1e-9)
-      hint.innerHTML = "Singular: the plane collapses onto a line. Some <i>y</i> are unreachable; solutions are not unique.";
-    else
-      hint.innerHTML = "Invertible: every <i>y</i> has a unique <i>x</i> with <i>Ax = y</i>.";
+    $("rdet").textContent = (det >= 0 ? "+" : "") + det.toFixed(2);
+    $("rorient").textContent = Math.abs(det) < 1e-9 ? "collapsed" : (det > 0 ? "preserved" : "flipped");
+    $("rhint").innerHTML = Math.abs(det) < 1e-9
+      ? "Singular: the plane collapses onto a line. Some <i>y</i> are unreachable; solutions are not unique."
+      : "Invertible: every <i>y</i> has a unique <i>x</i> with <i>Ax = y</i>.";
+  }
+  // sync every control from A; leave the field the user is editing (skip) alone
+  function syncMatrixUI(skip) {
+    ids.forEach((k, i) => {
+      if ("s" + k !== skip) $("s" + k).value = A[i];
+      if ("m" + k !== skip) $("m" + k).value = r2(A[i]);
+      $("v" + k).textContent = A[i].toFixed(2);
+    });
+    updateReadout();
+  }
+  function syncVectorUI(skip) {
+    if ("vx1" !== skip) $("vx1").value = r2(xVec[0]);
+    if ("vx2" !== skip) $("vx2").value = r2(xVec[1]);
   }
   function setA(M, animate) {
     if (animate) { animateTo(M); return; }
-    A = M.slice(); refreshMatrixUI(); draw();
+    A = M.slice(); syncMatrixUI(); draw();
   }
 
+  // sliders and typed matrix cells (two ways to set the same entries)
   ids.forEach((k, i) => {
-    document.getElementById("s" + k).addEventListener("input", e => {
-      A[i] = parseFloat(e.target.value);
-      refreshMatrixUI(); draw();
+    $("s" + k).addEventListener("input", e => { A[i] = parseFloat(e.target.value); syncMatrixUI("s" + k); draw(); });
+    $("m" + k).addEventListener("input", e => {
+      const v = parseFloat(e.target.value);
+      if (isNaN(v)) return;            // let the user type "-" or "" without snapping
+      A[i] = v; syncMatrixUI("m" + k); draw();
     });
   });
+  // typed vector components
+  $("vx1").addEventListener("input", e => { const v = parseFloat(e.target.value); if (!isNaN(v)) { xVec[0] = v; draw(); } });
+  $("vx2").addEventListener("input", e => { const v = parseFloat(e.target.value); if (!isNaN(v)) { xVec[1] = v; draw(); } });
 
   // toggles
   const tg = { grid: "tgGrid", orig: "tgOrig", square: "tgSquare", vec: "tgVec" };
   Object.entries(tg).forEach(([key, id]) => {
-    document.getElementById(id).addEventListener("change", e => { show[key] = e.target.checked; draw(); });
+    $(id).addEventListener("change", e => { show[key] = e.target.checked; draw(); });
   });
 
   // presets
-  const r = (deg) => { const t = deg * Math.PI / 180; return [Math.cos(t), -Math.sin(t), Math.sin(t), Math.cos(t)]; };
+  const rot = deg => { const t = deg * Math.PI / 180; return [Math.cos(t), -Math.sin(t), Math.sin(t), Math.cos(t)]; };
   const PRESETS = [
     ["Identity", [1, 0, 0, 1]],
-    ["Rotate 30°", r(30)],
+    ["Rotate 30°", rot(30)],
     ["Shear", [1, 1, 0, 1]],
     ["Scale", [1.8, 0, 0, 0.5]],
     ["Reflect (y=x)", [0, 1, 1, 0]],
@@ -339,37 +354,33 @@
     ["Rotate+Scale", [1.2, -0.7, 0.7, 1.2]],
     ["Random", null],
   ];
-  const pbox = document.getElementById("presets");
+  const pbox = $("presets");
   PRESETS.forEach(([name, M]) => {
     const b = document.createElement("button");
     b.textContent = name;
-    b.addEventListener("click", () => {
-      const target = M ? M : [rand(), rand(), rand(), rand()];
-      setA(target, true);
-    });
+    b.addEventListener("click", () => setA(M ? M : [rand(), rand(), rand(), rand()], true));
     pbox.appendChild(b);
   });
-  function rand() { return Math.round((Math.random() * 4 - 2) * 20) / 20; }
+  const rand = () => Math.round((Math.random() * 4 - 2) * 20) / 20;
 
-  // animation: morph from current A (or I) to target
+  // animation: morph from the identity to the target
   let animId = null;
   function animateTo(target) {
     if (animId) cancelAnimationFrame(animId);
-    const start = [1, 0, 0, 1];               // always morph from the identity for clarity
-    const dur = 750, t0 = performance.now();
+    const start = [1, 0, 0, 1], dur = 750, t0 = performance.now();
     function step(now) {
-      let u = Math.min(1, (now - t0) / dur);
-      const e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;  // ease in-out
+      const u = Math.min(1, (now - t0) / dur);
+      const e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
       A = start.map((s, i) => s + (target[i] - s) * e);
-      refreshMatrixUI(); draw();
-      if (u < 1) animId = requestAnimationFrame(step); else animId = null;
+      syncMatrixUI(); draw();
+      animId = u < 1 ? requestAnimationFrame(step) : null;
     }
     animId = requestAnimationFrame(step);
   }
-  document.getElementById("btnAnim").addEventListener("click", () => animateTo(A.slice()));
-  document.getElementById("btnReset").addEventListener("click", () => { xVec = [1.6, 1.0]; setA([1, 0, 0, 1], false); });
+  $("btnAnim").addEventListener("click", () => animateTo(A.slice()));
+  $("btnReset").addEventListener("click", () => { xVec = [1.6, 1.0]; syncVectorUI(); setA([1, 0, 0, 1], false); });
 
-  // dragging the input vector x
+  // dragging the input vector
   let dragging = false;
   function pointerWorld(ev) {
     const rect = cv.getBoundingClientRect();
@@ -383,15 +394,14 @@
   });
   cv.addEventListener("pointermove", ev => {
     if (!dragging) return;
-    xVec = pointerWorld(ev);
-    xVec = [Math.round(xVec[0] * 20) / 20, Math.round(xVec[1] * 20) / 20];
-    draw();
+    const w = pointerWorld(ev);
+    xVec = [Math.round(w[0] * 20) / 20, Math.round(w[1] * 20) / 20];
+    syncVectorUI(); draw();
   });
   cv.addEventListener("pointerup", () => { dragging = false; });
 
   window.addEventListener("resize", resize);
-  refreshMatrixUI();
-  resize();
+  syncMatrixUI(); syncVectorUI(); resize();
 })();
 </script>
 </body>
