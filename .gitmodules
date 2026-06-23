@@ -1,0 +1,3 @@
+[submodule "projects/math"]
+	path = projects/math
+	url = https://github.com/AmirAfsharrad/math-simulations.git
