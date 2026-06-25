@@ -35,11 +35,14 @@ const state = {
   lists: [],
   selectedListId: null,
   items: [],
+  archivedItems: [],
   stats: null,
   activeTab: "practice",
   direction: "target_to_source",
   currentCard: null,
   editingItemId: null,
+  itemView: "active",
+  menuOpen: false,
   message: null,
   error: null,
   loading: false,
@@ -213,14 +216,17 @@ async function loadWorkspace() {
   }
 
   if (state.selectedListId) {
-    const [itemsPayload, statsPayload] = await Promise.all([
-      api(`/api/lexeme/lists/${state.selectedListId}/items`),
+    const [itemsPayload, archivedItemsPayload, statsPayload] = await Promise.all([
+      api(`/api/lexeme/lists/${state.selectedListId}/items?archived=false`),
+      api(`/api/lexeme/lists/${state.selectedListId}/items?archived=true`),
       api(`/api/lexeme/stats?list_id=${state.selectedListId}`),
     ]);
     state.items = itemsPayload.items;
+    state.archivedItems = archivedItemsPayload.items;
     state.stats = statsPayload;
   } else {
     state.items = [];
+    state.archivedItems = [];
     state.stats = null;
   }
 }
@@ -289,9 +295,14 @@ function renderDashboard() {
     <div class="shell">
       <header class="topbar">
         <div class="topbar-inner">
-          <div>
-            <div class="wordmark"><span class="brand-mark small">L</span><span>Lexeme</span></div>
-            <div class="muted">Private learning workspace</div>
+          <div class="topbar-left">
+            <button type="button" class="menu-button" data-action="toggle-menu" aria-label="Open menu" aria-expanded="${state.menuOpen}">
+              <span class="hamburger-lines" aria-hidden="true"></span>
+            </button>
+            <div>
+              <div class="wordmark"><span class="brand-mark small">L</span><span>Lexeme</span></div>
+              <div class="muted">Private learning workspace</div>
+            </div>
           </div>
           <div class="userline">
             <span>${escapeHtml(state.user.username)}</span>
@@ -299,58 +310,67 @@ function renderDashboard() {
           </div>
         </div>
       </header>
-      <div class="layout">
-        <aside class="sidebar">
-          <div class="panel-header">
+      ${state.menuOpen ? `<div class="menu-backdrop" data-action="close-menu"></div>` : ""}
+      ${renderMenuDrawer()}
+      <main class="workspace">
+        ${state.error ? `<div class="message error">${escapeHtml(state.error)}</div>` : ""}
+        ${state.message ? `<div class="message">${escapeHtml(state.message)}</div>` : ""}
+        <section class="workspace-panel">
+          <div class="workspace-header">
             <div>
-              <h2>Lists</h2>
-              <div class="muted">${state.lists.length} total</div>
+              <h2>${list ? escapeHtml(list.name) : "No list selected"}</h2>
+              <div class="muted">${list ? `${escapeHtml(list.target_language || "Target")} from ${escapeHtml(list.source_language || "source")}` : "Create a list to begin."}</div>
             </div>
-            <button type="button" data-action="refresh">Refresh</button>
+            <div class="tab-row">
+              ${["practice", "items", "import", "stats"].map((tab) => `
+                <button type="button" data-action="set-tab" data-tab="${tab}" class="${state.activeTab === tab ? "segment-active" : ""}">${tab[0].toUpperCase()}${tab.slice(1)}</button>
+              `).join("")}
+            </div>
           </div>
-          <div>
-            ${state.lists.length ? state.lists.map(renderListButton).join("") : `<p class="muted">Create your first list.</p>`}
-          </div>
-          <hr>
-          <form id="create-list-form" class="stack">
-            <h3>New list</h3>
-            <label>Name <input name="name" required maxlength="120" placeholder="Spanish phrases"></label>
-            <div class="grid-two">
-              <label>Target <input name="target_language" maxlength="80" placeholder="Spanish"></label>
-              <label>Source <input name="source_language" maxlength="80" placeholder="English"></label>
-            </div>
-            <label>Description <textarea name="description" maxlength="500" placeholder="Optional"></textarea></label>
-            <button type="submit" class="primary">Create list</button>
-          </form>
-        </aside>
-        <main class="content">
-          ${state.error ? `<div class="message error">${escapeHtml(state.error)}</div>` : ""}
-          ${state.message ? `<div class="message">${escapeHtml(state.message)}</div>` : ""}
-          <section class="panel">
-            <div class="panel-header">
-              <div>
-                <h2>${list ? escapeHtml(list.name) : "No list selected"}</h2>
-                <div class="muted">${list ? `${escapeHtml(list.target_language || "Target")} from ${escapeHtml(list.source_language || "source")}` : "Create a list to begin."}</div>
-              </div>
-              <div class="tab-row">
-                ${["practice", "items", "import", "stats"].map((tab) => `
-                  <button type="button" data-action="set-tab" data-tab="${tab}" class="${state.activeTab === tab ? "segment-active" : ""}">${tab[0].toUpperCase()}${tab.slice(1)}</button>
-                `).join("")}
-              </div>
-            </div>
-            ${renderActiveTab()}
-          </section>
-        </main>
-      </div>
+          ${renderActiveTab()}
+        </section>
+      </main>
     </div>
   `;
 }
 
+function renderMenuDrawer() {
+  return `
+    <aside class="menu-drawer ${state.menuOpen ? "open" : ""}" aria-hidden="${!state.menuOpen}">
+      <div class="drawer-header">
+        <div>
+          <h2>Lists</h2>
+          <div class="muted">${state.lists.length} total</div>
+        </div>
+        <button type="button" class="ghost" data-action="close-menu">Close</button>
+      </div>
+      <div class="drawer-actions">
+        <button type="button" data-action="refresh">Refresh</button>
+      </div>
+      <div class="list-stack">
+        ${state.lists.length ? state.lists.map(renderListButton).join("") : `<p class="muted">Create your first list.</p>`}
+      </div>
+      <hr>
+      <form id="create-list-form" class="stack">
+        <h3>New list</h3>
+        <label>Name <input name="name" required maxlength="120" placeholder="Spanish phrases"></label>
+        <div class="grid-two compact">
+          <label>Target <input name="target_language" maxlength="80" placeholder="Spanish"></label>
+          <label>Source <input name="source_language" maxlength="80" placeholder="English"></label>
+        </div>
+        <label>Description <textarea name="description" maxlength="500" placeholder="Optional"></textarea></label>
+        <button type="submit" class="primary">Create list</button>
+      </form>
+    </aside>
+  `;
+}
+
 function renderListButton(list) {
+  const archivedCount = list.archived_count || 0;
   return `
     <button type="button" class="list-button ${list.id === state.selectedListId ? "segment-active" : ""}" data-action="select-list" data-list-id="${list.id}">
       <strong>${escapeHtml(list.name)}</strong>
-      <span class="muted">${list.item_count} items</span>
+      <span class="muted">${list.item_count} active${archivedCount ? ` · ${archivedCount} archived` : ""}</span>
     </button>
   `;
 }
@@ -367,9 +387,12 @@ function renderPractice() {
   const list = selectedList();
   if (!state.items.length) {
     return `
-      <div class="stack">
-        <p class="muted">This list has no items yet.</p>
-        <button type="button" class="primary" data-action="set-tab" data-tab="items">Add one manually</button>
+      <div class="empty-state">
+        <h3>No active cards</h3>
+        <p class="muted">${state.archivedItems.length ? "Archived cards are available in Items." : "Add expressions to begin practicing."}</p>
+        <div class="action-row centered">
+          <button type="button" class="primary" data-action="set-tab" data-tab="items">${state.archivedItems.length ? "Manage items" : "Add one manually"}</button>
+        </div>
       </div>
     `;
   }
@@ -387,8 +410,8 @@ function renderPractice() {
       </div>
       <div class="practice-card">
         ${card ? `
-          <div>
-            <div class="muted">${directionLabel(card.direction)}</div>
+          <div class="practice-card-inner">
+            <div class="eyebrow">${directionLabel(card.direction)}</div>
             <div class="prompt">${escapeHtml(card.prompt)}</div>
             <button type="button" class="listen-button" data-action="speak-card" data-card-role="prompt" title="Play pronunciation">Listen</button>
             ${card.revealed ? `
@@ -398,7 +421,7 @@ function renderPractice() {
             ` : `<p class="muted">Decide whether you remembered the answer, then reveal it.</p>`}
           </div>
         ` : `
-          <div>
+          <div class="practice-card-inner">
             <div class="prompt">Ready</div>
             <p class="muted">Start a review from ${state.items.length} items.</p>
           </div>
@@ -409,8 +432,10 @@ function renderPractice() {
           <button type="button" class="primary" data-action="answer-card" data-outcome="success">Got it</button>
           <button type="button" class="danger-soft" data-action="answer-card" data-outcome="fail">Missed</button>
           <button type="button" data-action="answer-card" data-outcome="skip">Skip</button>
+          <button type="button" data-action="archive-current">Archive</button>
         ` : `
           <button type="button" class="primary" data-action="next-card">${card ? "Next card" : "Start practice"}</button>
+          ${card ? `<button type="button" data-action="archive-current">Archive</button>` : ""}
         `}
       </div>
       ${card ? `<p class="help">Selection: ${escapeHtml(card.selection_reason)}. Seen before in this direction: ${card.shown_count_before}.</p>` : ""}
@@ -419,9 +444,19 @@ function renderPractice() {
 }
 
 function renderItems() {
+  const visibleItems = state.itemView === "archived" ? state.archivedItems : state.items;
+  const emptyText = state.itemView === "archived" ? "No archived items." : "No active items yet.";
+
   return `
     <div class="stack">
-      <form id="add-item-form" class="stack">
+      <div class="item-toolbar">
+        <div class="item-view-row">
+          <button type="button" data-action="set-item-view" data-item-view="active" class="${state.itemView === "active" ? "segment-active" : ""}">Active ${state.items.length}</button>
+          <button type="button" data-action="set-item-view" data-item-view="archived" class="${state.itemView === "archived" ? "segment-active" : ""}">Archived ${state.archivedItems.length}</button>
+        </div>
+      </div>
+      ${state.itemView === "active" ? `
+      <form id="add-item-form" class="add-item-form stack">
         <h3>Add expression</h3>
         <div class="grid-two">
           <label>Target language <textarea name="target_text" required maxlength="1000"></textarea></label>
@@ -429,6 +464,7 @@ function renderItems() {
         </div>
         <button type="submit" class="primary">Add item</button>
       </form>
+      ` : ""}
       <div class="table-wrap">
         <table>
           <thead>
@@ -440,7 +476,7 @@ function renderItems() {
             </tr>
           </thead>
           <tbody>
-            ${state.items.length ? state.items.map(renderItemRow).join("") : `<tr><td colspan="4" class="muted">No items yet.</td></tr>`}
+            ${visibleItems.length ? visibleItems.map(renderItemRow).join("") : `<tr><td colspan="4" class="muted">${emptyText}</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -486,6 +522,11 @@ function renderItemRow(item) {
       <td>
         <div class="row-actions">
           <button type="button" data-action="edit-item" data-item-id="${item.id}">Edit</button>
+          ${item.archived_at ? `
+            <button type="button" class="primary-soft" data-action="restore-item" data-item-id="${item.id}">Restore</button>
+          ` : `
+            <button type="button" data-action="archive-item" data-item-id="${item.id}">Archive</button>
+          `}
           <button type="button" class="danger" data-action="delete-item" data-item-id="${item.id}">Delete</button>
         </div>
       </td>
@@ -634,13 +675,19 @@ function bindDashboard() {
 async function handleAction(event) {
   const action = event.currentTarget.dataset.action;
   try {
+    if (action === "toggle-menu") return toggleMenu();
+    if (action === "close-menu") return closeMenu();
     if (action === "logout") return logout();
     if (action === "refresh") return await refresh();
     if (action === "select-list") return await selectList(event.currentTarget.dataset.listId);
     if (action === "set-tab") return await setTab(event.currentTarget.dataset.tab);
+    if (action === "set-item-view") return setItemView(event.currentTarget.dataset.itemView);
     if (action === "set-direction") return setDirection(event.currentTarget.dataset.direction);
     if (action === "next-card") return await loadNextCard();
     if (action === "answer-card") return await answerCard(event.currentTarget.dataset.outcome);
+    if (action === "archive-current") return await archiveCurrentCard();
+    if (action === "archive-item") return await archiveItem(event.currentTarget.dataset.itemId);
+    if (action === "restore-item") return await restoreItem(event.currentTarget.dataset.itemId);
     if (action === "speak-card") return await speakCard(event.currentTarget.dataset.cardRole);
     if (action === "speak-item") return await speakItem(event.currentTarget.dataset.itemId, event.currentTarget.dataset.side);
     if (action === "edit-item") return editItem(event.currentTarget.dataset.itemId);
@@ -652,6 +699,16 @@ async function handleAction(event) {
   }
 }
 
+function toggleMenu() {
+  state.menuOpen = !state.menuOpen;
+  render();
+}
+
+function closeMenu() {
+  state.menuOpen = false;
+  render();
+}
+
 async function speakCard(role) {
   if (!state.currentCard) return;
   const side = cardSideForRole(role);
@@ -660,7 +717,7 @@ async function speakCard(role) {
 }
 
 async function speakItem(itemId, side) {
-  const item = state.items.find((row) => row.id === itemId);
+  const item = [...state.items, ...state.archivedItems].find((row) => row.id === itemId);
   if (!item) return;
   await speakText(side === "target" ? item.target_text : item.source_text, languageForSide(side));
 }
@@ -677,8 +734,10 @@ function logout(shouldRender = true) {
   state.user = null;
   state.lists = [];
   state.items = [];
+  state.archivedItems = [];
   state.stats = null;
   state.currentCard = null;
+  state.menuOpen = false;
   if (shouldRender) render();
 }
 
@@ -686,6 +745,8 @@ async function selectList(listId) {
   state.selectedListId = listId;
   state.currentCard = null;
   state.editingItemId = null;
+  state.itemView = "active";
+  state.menuOpen = false;
   await loadWorkspace();
   render();
 }
@@ -699,6 +760,12 @@ async function setTab(tab) {
 function setDirection(direction) {
   state.direction = direction;
   state.currentCard = null;
+  render();
+}
+
+function setItemView(itemView) {
+  state.itemView = itemView === "archived" ? "archived" : "active";
+  state.editingItemId = null;
   render();
 }
 
@@ -717,6 +784,7 @@ async function handleCreateList(event) {
     });
     setMessage("List created.");
     await loadWorkspace();
+    state.menuOpen = false;
     render();
   } catch (error) {
     setMessage(error.message, true);
@@ -736,6 +804,7 @@ async function handleAddItem(event) {
       },
     });
     setMessage("Item added.");
+    state.itemView = "active";
     await loadWorkspace();
     render();
   } catch (error) {
@@ -792,16 +861,44 @@ async function handleEditItem(event) {
   }
 }
 
+async function archiveCurrentCard() {
+  if (!state.currentCard) return;
+  await archiveItem(state.currentCard.item_id, true);
+}
+
+async function archiveItem(itemId, fromPractice = false) {
+  await api(`/api/lexeme/items/${itemId}/archive`, { method: "POST" });
+  if (state.currentCard?.item_id === itemId) state.currentCard = null;
+  setMessage(fromPractice ? "Card archived." : "Item archived.");
+  await loadWorkspace();
+  render();
+}
+
+async function restoreItem(itemId) {
+  await api(`/api/lexeme/items/${itemId}/restore`, { method: "POST" });
+  setMessage("Item restored.");
+  await loadWorkspace();
+  render();
+}
+
 async function deleteItem(itemId) {
   if (!confirm("Delete this item? Its past review events will remain in the database.")) return;
 
   const previousItems = state.items;
+  const previousArchivedItems = state.archivedItems;
   const previousLists = state.lists;
+  const item = [...state.items, ...state.archivedItems].find((row) => row.id === itemId);
+  const wasArchived = Boolean(item?.archived_at);
 
   state.items = state.items.filter((item) => item.id !== itemId);
+  state.archivedItems = state.archivedItems.filter((item) => item.id !== itemId);
   state.lists = state.lists.map((list) => (
     list.id === state.selectedListId
-      ? { ...list, item_count: Math.max(0, list.item_count - 1) }
+      ? {
+        ...list,
+        item_count: wasArchived ? list.item_count : Math.max(0, list.item_count - 1),
+        archived_count: wasArchived ? Math.max(0, (list.archived_count || 0) - 1) : list.archived_count || 0,
+      }
       : list
   ));
   if (state.currentCard?.item_id === itemId) state.currentCard = null;
@@ -814,6 +911,7 @@ async function deleteItem(itemId) {
     render();
   } catch (error) {
     state.items = previousItems;
+    state.archivedItems = previousArchivedItems;
     state.lists = previousLists;
     setMessage(error.message, true);
     render();
