@@ -89,6 +89,33 @@ function selectedList() {
   return state.lists.find((list) => list.id === state.selectedListId) || null;
 }
 
+function statsTotals() {
+  return state.stats?.totals || {};
+}
+
+function answeredCount() {
+  return statsTotals().answered_count || 0;
+}
+
+function successRate() {
+  return pct(statsTotals().success_count || 0, answeredCount());
+}
+
+function activeListLabel() {
+  const list = selectedList();
+  if (!list) return "No active list";
+  return `${list.target_language || "Target"} from ${list.source_language || "source"}`;
+}
+
+function tabLabel(tab) {
+  return {
+    practice: "Practice",
+    items: "Library",
+    import: "Import",
+    stats: "Analytics",
+  }[tab] || tab;
+}
+
 function languageCodeFromLabel(label, fallback = "en-US") {
   const raw = String(label || "").trim();
   if (!raw) return fallback;
@@ -241,7 +268,7 @@ async function loadSelectedStats() {
 
 function render() {
   if (state.loading && !state.user) {
-    app.innerHTML = `<div class="auth-page"><div class="auth-card"><div class="brand"><div class="brand-lockup"><span class="brand-mark">L</span><h1>Lexeme</h1></div><p>Loading...</p></div></div></div>`;
+    app.innerHTML = `<div class="auth-page"><section class="auth-shell loading-shell"><div class="brand"><div class="brand-lockup"><span class="brand-mark">L</span><h1>Lexeme</h1></div><p>Loading your workspace...</p></div></section></div>`;
     return;
   }
 
@@ -259,31 +286,58 @@ function renderAuth() {
   const isLogin = state.authMode === "login";
   app.innerHTML = `
     <main class="auth-page">
-      <section class="auth-card">
-        <div class="brand">
-          <div class="brand-lockup">
-            <span class="brand-mark">L</span>
-            <h1>Lexeme</h1>
+      <section class="auth-shell">
+        <div class="auth-intro">
+          <div class="brand">
+            <div class="brand-lockup">
+              <span class="brand-mark">L</span>
+              <h1>Lexeme</h1>
+            </div>
+            <p>Expression memory for language learners who want focused review, clear progress, and a calm workspace.</p>
           </div>
-          <p>Store expressions, practice both directions, and track what sticks.</p>
+          <div class="auth-preview">
+            <div class="preview-header">
+              <span class="eyebrow">Today</span>
+              <strong>Review queue</strong>
+            </div>
+            <div class="preview-row">
+              <span>Active cards</span>
+              <strong>128</strong>
+            </div>
+            <div class="preview-row">
+              <span>Success rate</span>
+              <strong>74%</strong>
+            </div>
+            <div class="preview-card">
+              <span class="eyebrow">Spanish to English</span>
+              <strong>dar en el clavo</strong>
+              <span>to hit the nail on the head</span>
+            </div>
+          </div>
         </div>
-        ${state.error ? `<div class="message error">${escapeHtml(state.error)}</div>` : ""}
-        ${state.message ? `<div class="message">${escapeHtml(state.message)}</div>` : ""}
-        <div class="auth-switch">
-          <button type="button" data-auth-mode="login" class="${isLogin ? "segment-active" : ""}">Log in</button>
-          <button type="button" data-auth-mode="register" class="${!isLogin ? "segment-active" : ""}">Create account</button>
+        <div class="auth-card">
+          <div>
+            <span class="eyebrow">Private workspace</span>
+            <h2>${isLogin ? "Log in" : "Create account"}</h2>
+          </div>
+          ${state.error ? `<div class="message error">${escapeHtml(state.error)}</div>` : ""}
+          ${state.message ? `<div class="message">${escapeHtml(state.message)}</div>` : ""}
+          <div class="auth-switch">
+            <button type="button" data-auth-mode="login" class="${isLogin ? "segment-active" : ""}">Log in</button>
+            <button type="button" data-auth-mode="register" class="${!isLogin ? "segment-active" : ""}">Create account</button>
+          </div>
+          <form id="auth-form" class="stack">
+            <label>
+              Username
+              <input name="username" autocomplete="username" required minlength="3" maxlength="64">
+            </label>
+            <label>
+              Password
+              <input name="password" type="password" autocomplete="${isLogin ? "current-password" : "new-password"}" required minlength="8">
+            </label>
+            <button class="primary" type="submit">${isLogin ? "Log in" : "Create account"}</button>
+          </form>
         </div>
-        <form id="auth-form" class="stack">
-          <label>
-            Username
-            <input name="username" autocomplete="username" required minlength="3" maxlength="64">
-          </label>
-          <label>
-            Password
-            <input name="password" type="password" autocomplete="${isLogin ? "current-password" : "new-password"}" required minlength="8">
-          </label>
-          <button class="primary" type="submit">${isLogin ? "Log in" : "Create account"}</button>
-        </form>
       </section>
     </main>
   `;
@@ -291,6 +345,9 @@ function renderAuth() {
 
 function renderDashboard() {
   const list = selectedList();
+  const totals = statsTotals();
+  const answered = answeredCount();
+  const shown = totals.shown_count || 0;
   app.innerHTML = `
     <div class="shell">
       <header class="topbar">
@@ -301,7 +358,7 @@ function renderDashboard() {
             </button>
             <div>
               <div class="wordmark"><span class="brand-mark small">L</span><span>Lexeme</span></div>
-              <div class="muted">Private learning workspace</div>
+              <div class="topbar-subtitle">${escapeHtml(activeListLabel())}</div>
             </div>
           </div>
           <div class="userline">
@@ -315,18 +372,43 @@ function renderDashboard() {
       <main class="workspace">
         ${state.error ? `<div class="message error">${escapeHtml(state.error)}</div>` : ""}
         ${state.message ? `<div class="message">${escapeHtml(state.message)}</div>` : ""}
-        <section class="workspace-panel">
-          <div class="workspace-header">
-            <div>
-              <h2>${list ? escapeHtml(list.name) : "No list selected"}</h2>
-              <div class="muted">${list ? `${escapeHtml(list.target_language || "Target")} from ${escapeHtml(list.source_language || "source")}` : "Create a list to begin."}</div>
-            </div>
-            <div class="tab-row">
-              ${["practice", "items", "import", "stats"].map((tab) => `
-                <button type="button" data-action="set-tab" data-tab="${tab}" class="${state.activeTab === tab ? "segment-active" : ""}">${tab[0].toUpperCase()}${tab.slice(1)}</button>
-              `).join("")}
+        <section class="workspace-hero">
+          <div class="hero-copy">
+            <span class="eyebrow">Study workspace</span>
+            <h2>${list ? escapeHtml(list.name) : "Create a learning list"}</h2>
+            <p>${list ? escapeHtml(list.description || activeListLabel()) : "Use the menu to create the first collection."}</p>
+            <div class="hero-actions">
+              <button type="button" class="primary" data-action="${list ? "set-tab" : "toggle-menu"}" ${list ? 'data-tab="practice"' : ""}>${list ? "Practice" : "Create list"}</button>
+              ${list ? `<button type="button" data-action="set-tab" data-tab="items">Manage library</button>` : ""}
             </div>
           </div>
+          <div class="hero-ledger">
+            <div class="ledger-card">
+              <span>Active</span>
+              <strong>${state.items.length}</strong>
+            </div>
+            <div class="ledger-card">
+              <span>Archived</span>
+              <strong>${state.archivedItems.length}</strong>
+            </div>
+            <div class="ledger-card">
+              <span>Shown</span>
+              <strong>${shown}</strong>
+            </div>
+            <div class="ledger-card">
+              <span>Success</span>
+              <strong>${answered ? successRate() : "0%"}</strong>
+            </div>
+          </div>
+        </section>
+        <nav class="product-tabs" aria-label="Workspace sections">
+          ${["practice", "items", "import", "stats"].map((tab) => `
+            <button type="button" data-action="set-tab" data-tab="${tab}" class="${state.activeTab === tab ? "segment-active" : ""}">
+              <span>${tabLabel(tab)}</span>
+            </button>
+          `).join("")}
+        </nav>
+        <section class="product-stage ${state.activeTab}-stage">
           ${renderActiveTab()}
         </section>
       </main>
@@ -337,22 +419,27 @@ function renderDashboard() {
 function renderMenuDrawer() {
   return `
     <aside class="menu-drawer ${state.menuOpen ? "open" : ""}" aria-hidden="${!state.menuOpen}">
-      <div class="drawer-header">
-        <div>
-          <h2>Lists</h2>
-          <div class="muted">${state.lists.length} total</div>
-        </div>
+      <div class="drawer-brand">
+        <div class="wordmark"><span class="brand-mark small">L</span><span>Lexeme</span></div>
         <button type="button" class="ghost" data-action="close-menu">Close</button>
       </div>
-      <div class="drawer-actions">
-        <button type="button" data-action="refresh">Refresh</button>
+      <div class="drawer-panel">
+        <div class="drawer-section-title">
+          <div>
+            <span class="eyebrow">Collections</span>
+            <h2>${state.lists.length} lists</h2>
+          </div>
+          <button type="button" data-action="refresh">Refresh</button>
+        </div>
+        <div class="list-stack">
+          ${state.lists.length ? state.lists.map(renderListButton).join("") : `<p class="muted">No lists yet.</p>`}
+        </div>
       </div>
-      <div class="list-stack">
-        ${state.lists.length ? state.lists.map(renderListButton).join("") : `<p class="muted">Create your first list.</p>`}
-      </div>
-      <hr>
-      <form id="create-list-form" class="stack">
-        <h3>New list</h3>
+      <form id="create-list-form" class="drawer-panel stack">
+        <div>
+          <span class="eyebrow">New collection</span>
+          <h3>Create list</h3>
+        </div>
         <label>Name <input name="name" required maxlength="120" placeholder="Spanish phrases"></label>
         <div class="grid-two compact">
           <label>Target <input name="target_language" maxlength="80" placeholder="Spanish"></label>
@@ -369,14 +456,26 @@ function renderListButton(list) {
   const archivedCount = list.archived_count || 0;
   return `
     <button type="button" class="list-button ${list.id === state.selectedListId ? "segment-active" : ""}" data-action="select-list" data-list-id="${list.id}">
-      <strong>${escapeHtml(list.name)}</strong>
-      <span class="muted">${list.item_count} active${archivedCount ? ` · ${archivedCount} archived` : ""}</span>
+      <span>
+        <strong>${escapeHtml(list.name)}</strong>
+        <small>${escapeHtml(list.target_language || "Target")} / ${escapeHtml(list.source_language || "Source")}</small>
+      </span>
+      <span class="list-count">${list.item_count}${archivedCount ? ` +${archivedCount}` : ""}</span>
     </button>
   `;
 }
 
 function renderActiveTab() {
-  if (!state.selectedListId) return `<p class="muted">Create a list before adding expressions.</p>`;
+  if (!state.selectedListId) {
+    return `
+      <div class="empty-state">
+        <span class="eyebrow">No collection</span>
+        <h3>Create a list to start</h3>
+        <p class="muted">Lists keep each language, class, or theme separate.</p>
+        <button type="button" class="primary" data-action="toggle-menu">Open menu</button>
+      </div>
+    `;
+  }
   if (state.activeTab === "items") return renderItems();
   if (state.activeTab === "import") return renderImport();
   if (state.activeTab === "stats") return renderStats();
@@ -385,9 +484,12 @@ function renderActiveTab() {
 
 function renderPractice() {
   const list = selectedList();
+  const totals = statsTotals();
+  const answered = answeredCount();
   if (!state.items.length) {
     return `
       <div class="empty-state">
+        <span class="eyebrow">Practice</span>
         <h3>No active cards</h3>
         <p class="muted">${state.archivedItems.length ? "Archived cards are available in Items." : "Add expressions to begin practicing."}</p>
         <div class="action-row centered">
@@ -399,46 +501,74 @@ function renderPractice() {
 
   const card = state.currentCard;
   return `
-    <div class="stack">
-      <div class="direction-row">
-        <button type="button" data-action="set-direction" data-direction="target_to_source" class="${state.direction === "target_to_source" ? "segment-active" : ""}">
-          ${escapeHtml(list.target_language || "Target")} to ${escapeHtml(list.source_language || "source")}
-        </button>
-        <button type="button" data-action="set-direction" data-direction="source_to_target" class="${state.direction === "source_to_target" ? "segment-active" : ""}">
-          ${escapeHtml(list.source_language || "Source")} to ${escapeHtml(list.target_language || "target")}
-        </button>
-      </div>
-      <div class="practice-card">
-        ${card ? `
-          <div class="practice-card-inner">
-            <div class="eyebrow">${directionLabel(card.direction)}</div>
-            <div class="prompt">${escapeHtml(card.prompt)}</div>
-            <button type="button" class="listen-button" data-action="speak-card" data-card-role="prompt" title="Play pronunciation">Listen</button>
-            ${card.revealed ? `
-              <div class="answer">${escapeHtml(card.answer)}</div>
-              <button type="button" class="listen-button" data-action="speak-card" data-card-role="answer" title="Play pronunciation">Listen</button>
-              <p class="muted">Recorded as ${escapeHtml(card.outcome)}.</p>
-            ` : `<p class="muted">Decide whether you remembered the answer, then reveal it.</p>`}
+    <div class="practice-layout">
+      <section class="study-console">
+        <div class="console-head">
+          <div>
+            <span class="eyebrow">Practice mode</span>
+            <h3>${directionLabel(state.direction)}</h3>
           </div>
-        ` : `
-          <div class="practice-card-inner">
-            <div class="prompt">Ready</div>
-            <p class="muted">Start a review from ${state.items.length} items.</p>
+          <div class="direction-row">
+            <button type="button" data-action="set-direction" data-direction="target_to_source" class="${state.direction === "target_to_source" ? "segment-active" : ""}">
+              ${escapeHtml(list.target_language || "Target")} to ${escapeHtml(list.source_language || "source")}
+            </button>
+            <button type="button" data-action="set-direction" data-direction="source_to_target" class="${state.direction === "source_to_target" ? "segment-active" : ""}">
+              ${escapeHtml(list.source_language || "Source")} to ${escapeHtml(list.target_language || "target")}
+            </button>
           </div>
-        `}
-      </div>
-      <div class="action-row">
-        ${card && !card.revealed ? `
-          <button type="button" class="primary" data-action="answer-card" data-outcome="success">Got it</button>
-          <button type="button" class="danger-soft" data-action="answer-card" data-outcome="fail">Missed</button>
-          <button type="button" data-action="answer-card" data-outcome="skip">Skip</button>
-          <button type="button" data-action="archive-current">Archive</button>
-        ` : `
-          <button type="button" class="primary" data-action="next-card">${card ? "Next card" : "Start practice"}</button>
-          ${card ? `<button type="button" data-action="archive-current">Archive</button>` : ""}
-        `}
-      </div>
-      ${card ? `<p class="help">Selection: ${escapeHtml(card.selection_reason)}. Seen before in this direction: ${card.shown_count_before}.</p>` : ""}
+        </div>
+        <div class="practice-card">
+          ${card ? `
+            <div class="practice-card-inner">
+              <div class="card-meta">
+                <span>${directionLabel(card.direction)}</span>
+                <span>Seen ${card.shown_count_before} times</span>
+              </div>
+              <div class="prompt">${escapeHtml(card.prompt)}</div>
+              <button type="button" class="listen-button" data-action="speak-card" data-card-role="prompt" title="Play pronunciation">Listen</button>
+              ${card.revealed ? `
+                <div class="answer-panel">
+                  <span class="eyebrow">Answer</span>
+                  <div class="answer">${escapeHtml(card.answer)}</div>
+                  <button type="button" class="listen-button" data-action="speak-card" data-card-role="answer" title="Play pronunciation">Listen</button>
+                  <span class="outcome-chip ${escapeHtml(card.outcome)}">${escapeHtml(card.outcome)}</span>
+                </div>
+              ` : `<p class="muted">Mark your recall, then the answer appears here.</p>`}
+            </div>
+          ` : `
+            <div class="practice-card-inner ready-state">
+              <span class="eyebrow">Queue ready</span>
+              <div class="prompt">Start review</div>
+              <p class="muted">${state.items.length} active expressions available.</p>
+            </div>
+          `}
+        </div>
+        <div class="review-controls">
+          ${card && !card.revealed ? `
+            <button type="button" class="primary" data-action="answer-card" data-outcome="success">Got it</button>
+            <button type="button" class="danger-soft" data-action="answer-card" data-outcome="fail">Missed</button>
+            <button type="button" data-action="answer-card" data-outcome="skip">Skip</button>
+            <button type="button" data-action="archive-current">Archive</button>
+          ` : `
+            <button type="button" class="primary" data-action="next-card">${card ? "Next card" : "Start practice"}</button>
+            ${card ? `<button type="button" data-action="archive-current">Archive</button>` : ""}
+          `}
+        </div>
+        ${card ? `<p class="help">Selection: ${escapeHtml(card.selection_reason)}.</p>` : ""}
+      </section>
+      <aside class="session-panel">
+        <span class="eyebrow">Session context</span>
+        <dl class="session-stats">
+          <div><dt>Active cards</dt><dd>${state.items.length}</dd></div>
+          <div><dt>Total shown</dt><dd>${totals.shown_count || 0}</dd></div>
+          <div><dt>Answered</dt><dd>${answered}</dd></div>
+          <div><dt>Success</dt><dd>${answered ? successRate() : "0%"}</dd></div>
+        </dl>
+        <div class="session-note">
+          <strong>Archive</strong>
+          <span>Archived cards leave the practice queue but remain restorable from the library.</span>
+        </div>
+      </aside>
     </div>
   `;
 }
@@ -448,24 +578,35 @@ function renderItems() {
   const emptyText = state.itemView === "archived" ? "No archived items." : "No active items yet.";
 
   return `
-    <div class="stack">
-      <div class="item-toolbar">
+    <div class="library-layout">
+      <section class="library-toolbar">
+        <div>
+          <span class="eyebrow">Library</span>
+          <h3>${state.itemView === "archived" ? "Archived expressions" : "Active expressions"}</h3>
+          <p class="muted">${visibleItems.length} visible in this view.</p>
+        </div>
         <div class="item-view-row">
           <button type="button" data-action="set-item-view" data-item-view="active" class="${state.itemView === "active" ? "segment-active" : ""}">Active ${state.items.length}</button>
           <button type="button" data-action="set-item-view" data-item-view="archived" class="${state.itemView === "archived" ? "segment-active" : ""}">Archived ${state.archivedItems.length}</button>
         </div>
-      </div>
+      </section>
       ${state.itemView === "active" ? `
-      <form id="add-item-form" class="add-item-form stack">
-        <h3>Add expression</h3>
+      <form id="add-item-form" class="editor-panel stack">
+        <div>
+          <span class="eyebrow">Manual entry</span>
+          <h3>Add expression</h3>
+        </div>
         <div class="grid-two">
           <label>Target language <textarea name="target_text" required maxlength="1000"></textarea></label>
           <label>Source language <textarea name="source_text" required maxlength="1000"></textarea></label>
         </div>
-        <button type="submit" class="primary">Add item</button>
+        <div class="action-row">
+          <button type="submit" class="primary">Add item</button>
+          <button type="button" data-action="set-tab" data-tab="import">Import file</button>
+        </div>
       </form>
       ` : ""}
-      <div class="table-wrap">
+      <div class="data-panel">
         <table>
           <thead>
             <tr>
@@ -507,13 +648,13 @@ function renderItemRow(item) {
   return `
     <tr>
       <td>
-        <div class="cell-with-action">
-          <span>${escapeHtml(item.target_text)}</span>
+        <div class="phrase-cell">
+          <strong>${escapeHtml(item.target_text)}</strong>
           <button type="button" class="listen-button table-listen" data-action="speak-item" data-item-id="${item.id}" data-side="target" title="Play pronunciation">Listen</button>
         </div>
       </td>
       <td>
-        <div class="cell-with-action">
+        <div class="phrase-cell">
           <span>${escapeHtml(item.source_text)}</span>
           <button type="button" class="listen-button table-listen" data-action="speak-item" data-item-id="${item.id}" data-side="source" title="Play pronunciation">Listen</button>
         </div>
@@ -536,15 +677,26 @@ function renderItemRow(item) {
 
 function renderImport() {
   return `
-    <form id="import-form" class="stack">
-      <h3>Import CSV or XLSX</h3>
-      <p class="muted">The first column is the target expression. The second column is the source translation. Extra columns are ignored.</p>
-      <label>
-        File
-        <input name="file" type="file" accept=".csv,.xlsx,.xlsm" required>
-      </label>
-      <button type="submit" class="primary">Import into selected list</button>
-    </form>
+    <div class="import-layout">
+      <form id="import-form" class="editor-panel stack">
+        <div>
+          <span class="eyebrow">Bulk upload</span>
+          <h3>Import CSV or XLSX</h3>
+          <p class="muted">Column one becomes the target expression. Column two becomes the source translation.</p>
+        </div>
+        <label>
+          File
+          <input name="file" type="file" accept=".csv,.xlsx,.xlsm" required>
+        </label>
+        <button type="submit" class="primary">Import into selected list</button>
+      </form>
+      <aside class="import-spec">
+        <span class="eyebrow">File shape</span>
+        <div class="spec-row"><strong>A</strong><span>Target expression</span></div>
+        <div class="spec-row"><strong>B</strong><span>Source translation</span></div>
+        <div class="spec-row muted"><strong>C+</strong><span>Ignored for now</span></div>
+      </aside>
+    </div>
   `;
 }
 
@@ -557,14 +709,14 @@ function renderStats() {
   const maxDaily = Math.max(1, ...stats.daily.map((row) => row.shown_count));
 
   return `
-    <div class="stack">
+    <div class="analytics-layout">
       <div class="grid-four">
-        <div class="metric"><span class="muted">Items</span><strong>${totals.item_count || 0}</strong></div>
-        <div class="metric"><span class="muted">Shown</span><strong>${totals.shown_count || 0}</strong></div>
-        <div class="metric"><span class="muted">Answered</span><strong>${answered}</strong></div>
-        <div class="metric"><span class="muted">Success rate</span><strong>${pct(totals.success_count || 0, answered)}</strong></div>
+        <div class="metric"><span>Items</span><strong>${totals.item_count || 0}</strong></div>
+        <div class="metric"><span>Shown</span><strong>${totals.shown_count || 0}</strong></div>
+        <div class="metric"><span>Answered</span><strong>${answered}</strong></div>
+        <div class="metric"><span>Success rate</span><strong>${pct(totals.success_count || 0, answered)}</strong></div>
       </div>
-      <div class="grid-two">
+      <div class="direction-grid">
         ${["target_to_source", "source_to_target"].map((direction) => {
           const row = stats.directions[direction] || {};
           const total = row.success_count || 0;
@@ -572,15 +724,26 @@ function renderStats() {
           const skipped = row.skip_count || 0;
           const answeredDirection = total + missed + skipped;
           return `
-            <div class="metric">
+            <div class="direction-card">
               <strong>${directionLabel(direction)}</strong>
-              <div class="muted">${row.shown_count || 0} shown · ${pct(total, answeredDirection)} success</div>
+              <div class="direction-meta">
+                <span>${row.shown_count || 0} shown</span>
+                <span>${pct(total, answeredDirection)} success</span>
+              </div>
+              <div class="mini-breakdown">
+                <span style="width: ${answeredDirection ? (total / answeredDirection) * 100 : 0}%"></span>
+                <span style="width: ${answeredDirection ? (missed / answeredDirection) * 100 : 0}%"></span>
+                <span style="width: ${answeredDirection ? (skipped / answeredDirection) * 100 : 0}%"></span>
+              </div>
             </div>
           `;
         }).join("")}
       </div>
-      <div>
-        <h3>Last 30 days</h3>
+      <section class="chart-panel">
+        <div class="section-heading">
+          <span class="eyebrow">Last 30 days</span>
+          <h3>Review activity</h3>
+        </div>
         <div class="daily-bars">
           ${stats.daily.length ? stats.daily.map((row) => `
             <div class="daily-row">
@@ -590,32 +753,33 @@ function renderStats() {
             </div>
           `).join("") : `<p class="muted">No reviews yet.</p>`}
         </div>
-      </div>
-      <div>
-        <h3>Item statistics</h3>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Expression</th>
-                <th>Target to source</th>
-                <th>Source to target</th>
-                <th>Last seen</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${stats.items.length ? stats.items.map((item) => `
-                <tr>
-                  <td><strong>${escapeHtml(item.target_text)}</strong><br><span class="muted">${escapeHtml(item.source_text)}</span></td>
-                  <td>${item.target_to_source_shown} shown · ${item.target_to_source_success} right · ${item.target_to_source_fail} missed</td>
-                  <td>${item.source_to_target_shown} shown · ${item.source_to_target_success} right · ${item.source_to_target_fail} missed</td>
-                  <td>${formatDate(item.last_seen_at)}</td>
-                </tr>
-              `).join("") : `<tr><td colspan="4" class="muted">No items yet.</td></tr>`}
-            </tbody>
-          </table>
+      </section>
+      <section class="data-panel">
+        <div class="section-heading table-heading">
+          <span class="eyebrow">Per expression</span>
+          <h3>Item statistics</h3>
         </div>
-      </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Expression</th>
+              <th>Target to source</th>
+              <th>Source to target</th>
+              <th>Last seen</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${stats.items.length ? stats.items.map((item) => `
+              <tr>
+                <td><strong>${escapeHtml(item.target_text)}</strong><br><span class="muted">${escapeHtml(item.source_text)}</span></td>
+                <td>${item.target_to_source_shown} shown · ${item.target_to_source_success} right · ${item.target_to_source_fail} missed</td>
+                <td>${item.source_to_target_shown} shown · ${item.source_to_target_success} right · ${item.source_to_target_fail} missed</td>
+                <td>${formatDate(item.last_seen_at)}</td>
+              </tr>
+            `).join("") : `<tr><td colspan="4" class="muted">No items yet.</td></tr>`}
+          </tbody>
+        </table>
+      </section>
     </div>
   `;
 }
