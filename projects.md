@@ -33,11 +33,3 @@ permalink: /projects/
 </style>
 
 This is where I keep small tools, experiments, and personal projects that are useful enough to share.
-
-<div class="project-list">
-  <article class="project-card">
-    <h2><a href="{{ '/projects/math/' | relative_url }}">Math Simulations</a></h2>
-    <p>Interactive visualizations for the linear-algebra ideas behind my EE263 course: matrix transformations, linearization, and more.</p>
-    <div class="project-meta">For students and the curious.</div>
-  </article>
-</div>
