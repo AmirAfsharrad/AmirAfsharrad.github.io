@@ -22,6 +22,10 @@ The course covers linear algebra and matrix methods with a strong emphasis on en
 
 Note that before Fall 2025, this course was titled "Introduction to Linear Dynamical Systems." Starting Fall 2025, the content was split into two courses: **EE 263: Matrix Methods** now focuses primarily on linear algebra and SVD, while a new course, **EE 363: Linear Dynamical Systems**, covers dynamical systems topics from the old EE 263 along with more advanced material. The latest version of EE 263 is always available at [ee263.stanford.edu](https://ee263.stanford.edu/).
 
+## Interactive Simulations
+
+[Open the EE263 interactive simulations](/teaching/ee263-matrix-methods/sim/).
+
 ## Course Materials (Summer 2025)
 
 ### Lectures
